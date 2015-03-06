@@ -1,0 +1,42 @@
+#from events_handlers import *
+#import utility_functions as utils
+
+
+class Task:
+	""" Class that represents any step """
+
+	def __init__(self, id, task_prio):
+
+		self.id = id
+		self.task_prio = task_prio
+		self.arr_time = 0
+		self.steps_list = None
+		self.steps_array = []
+		self.next = None
+		
+        
+	def print_task(self):
+		return "(" + str(self.id) + "," + str(self.arr_time) + ","\
+		+ str(self.task_prio) + ")"
+	
+			
+	def print_task_steps(self):
+		for s in self.steps_array:
+			print s.print_step()
+		
+		
+	def add_step(self, new_step):
+		self.steps_array.extend([new_step])
+		
+		
+	def sort_steps_ordering(self):
+		self.steps_array.sort(key=lambda x: x.order)
+		
+		
+		 
+        
+    
+		
+		
+		
+
