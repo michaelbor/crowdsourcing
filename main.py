@@ -4,41 +4,53 @@ import numpy as np
 
 data = np.genfromtxt('input.txt', delimiter=', ', \
 dtype=[('id','i8'), ('arr_time','f8'), ('task_id','i8'),\
- ('skills','S500'), ('task_prio','i8'), ('order','i8')])
-
-#print data[:]
-print data[0][3]
-#k = '['+(data[0][3]).split('[[')[1].split(']]')[0]+']'
-k = data[0][3]
-k = k.translate(None,'[]\'')
-k = k.split(',')
-print k
+ ('skills','S5000'), ('task_prio','i8'), ('order','i8')])
 
 
-s1 = Step(1, 23.3, 300, [['read',3000],['write',2000],['C',3000]], 15,1)
-s2 = Step(2, 23.3, 300, [['read',3000],['write',2000],['C',3000]], 15,4)
-s3 = Step(3, 23.3, 300, [['read',3000],['write',2000],['C',3000]], 15,3)
-s4 = Step(4, 23.3, 300, [['read',3000],['write',2000],['C',3000]], 15,6)
-s5 = Step(5, 23.3, 300, [['read',3000],['write',2000],['C',3000]], 15,2)
-s6 = Step(6, 23.3, 300, [['read',3000],['write',2000],['C',3000]], 15,1)
 
-t1 = Task(1, 1000)
-
-#t1.print_task_steps()
-
-t1.add_step(s1)
-t1.add_step(s2)
-t1.add_step(s3)
-t1.add_step(s4)
-t1.add_step(s6)
-t1.add_step(s5)
-
-#t1.print_task_steps()
-
-t1.sort_steps_ordering()
-print '===='
-t1.print_task_steps()
+def parse_skills(skills_string):
+	k = skills_string.translate(None,'[]')
+	k = k.split(',')
+	k = map(int,k)
+	k=[[k[2*i],k[2*i+1]] for i in range(len(k)/2)]
+	return k
+	
 
 
-#print s1.print_step();
-#print 'Hello world!!!'
+
+'''
+Initializing tasks dictionary that will hold all the tasks objects. 
+These objects can be accessible by task_id.
+'''
+tasks_dict = {};
+for i in range(0,len(data)):
+	if tasks_dict.has_key(data[i]['task_id']) == False:
+		tasks_dict[data[i]['task_id']] = Task(data[i]['task_id'], data[i]['task_prio'])
+	
+	s = Step(data[i]['id'], data[i]['arr_time'], data[i]['task_id'], parse_skills(data[i]['skills']), data[i]['task_prio'],data[i]['order'])
+	tasks_dict[data[i]['task_id']].add_step(s)
+		
+print ['num of distinct task ids: ',len(set(data[:]['task_id'])), "which is also: " ,len(tasks_dict)]
+
+
+'''
+From now we don't need the dictionary, but only a list. Since we will need to sort tasks.
+'''
+
+tasks_array = tasks_dict.values()
+
+for i in tasks_array:
+	i.sort_steps_ordering()
+	i.set_task_arr_time()
+	
+
+tasks_array.sort(key=lambda x: x.arr_time)
+tasks_array.sort(key=lambda x: x.task_prio,reverse=True)
+
+for i in tasks_array:
+	print "task_id: "+str(i.id)
+	i.print_task_steps()
+	print '========='
+
+
+

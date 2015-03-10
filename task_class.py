@@ -3,7 +3,7 @@
 
 
 class Task:
-	""" Class that represents any step """
+	""" Class that represents any task """
 
 	def __init__(self, id, task_prio):
 
@@ -30,7 +30,17 @@ class Task:
 		
 		
 	def sort_steps_ordering(self):
+		self.steps_array.sort(key=lambda x: x.arr_time)
 		self.steps_array.sort(key=lambda x: x.order)
+		
+	def set_task_arr_time(self):
+		for i in self.steps_array:
+			if i.isCompleted == False:
+				self.arr_time = i.arr_time
+				return
+				
+		print 'Error: all steps for this task were completed'
+		self.arr_time = -1
 		
 		
 		 

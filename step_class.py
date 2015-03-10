@@ -20,7 +20,7 @@ class Step:
 	def print_step(self):
 		return "(" + str(self.id) + "," + str(self.arr_time) + ","\
 		+ str(self.task_id) + "," +str(self.skills)+","\
-		+str(self.task_prio)+","+str(self.order)+")"
+		+str(self.task_prio)+","+str(self.order)+") comp: "+str(self.isCompleted)
         
     
 		
