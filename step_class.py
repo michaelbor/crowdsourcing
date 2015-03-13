@@ -14,8 +14,7 @@ class Step:
 		self.isCompleted = False
 		self.task_prio = task_prio
 		self.order = order
-		self.next = None
-		
+				
         
 	def print_step(self):
 		return "(" + str(self.id) + "," + str(self.arr_time) + ","\

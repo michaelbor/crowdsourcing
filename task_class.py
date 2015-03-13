@@ -12,8 +12,7 @@ class Task:
 		self.arr_time = 0
 		self.steps_list = None
 		self.steps_array = []
-		self.next = None
-		
+				
         
 	def print_task(self):
 		return "(" + str(self.id) + "," + str(self.arr_time) + ","\

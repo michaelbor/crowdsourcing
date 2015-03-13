@@ -1,6 +1,8 @@
 from step_class import Step
 from task_class import Task
+from worker_class import Worker
 import numpy as np
+import algorithm_greedy as algo
 
 data = np.genfromtxt('input_steps.txt', delimiter=', ', \
 dtype=[('id','i8'), ('arr_time','f8'), ('task_id','i8'),\
@@ -38,12 +40,14 @@ def extract_steps_for_allocation(tasks_array):
 
 workers_array=[]
 for i in range(0,len(data_workers)):
-	workers_array.extend([[data_workers[i]['id'],\
-	parse_skills_workers(data_workers[i]['skills']),data_workers[i]['avail_time']]]);
+	new_worker = Worker(data_workers[i]['id'],\
+	parse_skills_workers(data_workers[i]['skills']),\
+	data_workers[i]['avail_time'])
+	workers_array.extend([new_worker]);
 	
 
 for i in workers_array:
-	print 'worker: '+str(i)
+	print 'worker: '+i.print_worker()
 
 
 '''
@@ -83,6 +87,12 @@ for i in tasks_array:
 
 steps_for_allocation = extract_steps_for_allocation(tasks_array)
 
+
 for i in steps_for_allocation:
 	print i.print_step()
+
+
+algo.allocate_jobs(steps_for_allocation, workers_array)
+
+
 
