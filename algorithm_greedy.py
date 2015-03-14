@@ -1,4 +1,4 @@
-
+import utils
 
 def update_avail_time(workers_array):
 	for worker in workers_array:
@@ -18,12 +18,9 @@ def is_step_completed(step):
 			
 	return True
 
-def print_steps(steps_list):
-	for step in steps_list:
-		print step.print_step()
 				
 def allocate_jobs(steps_array, workers_array):
-	print 'allocating...'
+
 	for step in steps_array:
 		for skill in step.skills:
 			required_time = skill[1]
@@ -43,8 +40,7 @@ def allocate_jobs(steps_array, workers_array):
 		if is_step_completed(step) == True:
 			step.isCompleted = True 
 				
-		
-	print_steps(steps_array)		
+	utils.print_steps_after_allocation(steps_array)		
 	return	
 	
 		

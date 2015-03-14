@@ -1,6 +1,3 @@
-#from events_handlers import *
-#import utility_functions as utils
-
 
 class Step:
 	""" Class that represents any step """
