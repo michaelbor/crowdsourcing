@@ -42,8 +42,6 @@ def init_steps_from_file(data):
 		s = Step(data[i]['id'], data[i]['arr_time'], data[i]['task_id'], parse_skills_steps(data[i]['skills']), data[i]['task_prio'],data[i]['order'])
 		tasks_dict[data[i]['task_id']].add_step(s)
 		
-	#print ['num of distinct task ids: ',len(set(data[:]['task_id'])), "which is also: " ,len(tasks_dict)]
-
 	'''
 	From now we don't need the dictionary, but only a list. Since we will need to sort tasks.
 	'''
