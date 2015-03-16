@@ -9,14 +9,17 @@ class Step:
 		self.task_id = task_id
 		self.skills = skills
 		self.isCompleted = False
+		self.isFullyScheduled = False
 		self.task_prio = task_prio
 		self.order = order
+		self.isLocked = True
+		self.timeToFinish = 0
 				
         
 	def print_step(self):
 		return "(" + str(self.id) + "," + str(self.arr_time) + ","\
 		+ str(self.task_id) + "," +str(self.skills)+","\
-		+str(self.task_prio)+","+str(self.order)+") comp: "+str(self.isCompleted)
+		+str(self.task_prio)+","+str(self.order)+") sched: "+str(self.isFullyScheduled) + ", comp: "+str(self.isCompleted)
         
     
 		

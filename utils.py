@@ -38,12 +38,49 @@ def print_steps_after_allocation(steps):
 
 def extract_steps_for_allocation(tasks_array):
 	steps_for_allocation=[]
+	isPrevCompleted = True
+	prevOrder = -1
 	for task in tasks_array:
 		for step in task.steps_array:
-			if step.isCompleted == False:
+			if step.isFullyScheduled == False and step.isLocked == False:
 				steps_for_allocation.extend([step])
 			
 	return steps_for_allocation
+	
+	
+def unlock_next_steps(cur_step, steps_array):
+	idx = steps_array.index(cur_step)
+	if idx == len(steps_array) - 1:
+		return
+	if cur_step.order < steps_array[idx+1].order:
+		order_of_first = steps_array[idx+1].order	
+		for i in range(idx+1, len(steps_array)):
+			if steps_array[i].order == order_of_first:
+				steps_array[i].isLocked = False
+			else:
+				break
+	
+
+
+
+	
+	
+def update_steps_status(time_step, tasks_array):
+	for task in tasks_array:
+		for step in task.steps_array:
+			if step.isCompleted == False:
+				step.timeToFinish = max(0, step.timeToFinish - time_step)
+				if step.isFullyScheduled == True and step.timeToFinish == 0:
+					step.isCompleted = True
+					unlock_next_steps(step, task.steps_array)
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

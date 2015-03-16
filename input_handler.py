@@ -50,6 +50,13 @@ def init_steps_from_file(data):
 	for i in tasks_array:
 		i.sort_steps_ordering()
 		i.set_task_arr_time()
+		# now lets unlock first step of each task
+		order_of_first = i.steps_array[0].order
+		for step in i.steps_array:
+			if step.order == order_of_first:
+				step.isLocked = False
+			else:
+				break
 	
 	tasks_array.sort(key=lambda x: x.arr_time)
 	tasks_array.sort(key=lambda x: x.task_prio,reverse=True)
