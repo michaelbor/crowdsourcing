@@ -2,8 +2,14 @@ import numpy as np
 import algorithm_greedy as algo
 import input_handler as input
 import utils
+import data_generator as gen
 
-data_steps = np.genfromtxt('input_steps.txt', delimiter=', ', \
+
+total_num_of_steps = 200
+total_num_of_tasks = 40
+gen.random_steps(total_num_of_steps,total_num_of_tasks)
+
+data_steps = np.genfromtxt('input_steps1.txt', delimiter=', ', \
 dtype=[('id','i8'), ('arr_time','f8'), ('task_id','i8'),\
  ('skills','S5000'), ('task_prio','i8'), ('order','i8')])
 
@@ -20,7 +26,7 @@ utils.print_all_tasks(tasks_array)
 time = 0
 time_step = 1000
 
-num_of_iterations = 10
+num_of_iterations = 50
 
 for i in range(0,num_of_iterations):
 	
@@ -35,3 +41,4 @@ for i in range(0,num_of_iterations):
 
 
 utils.print_all_tasks(tasks_array)
+
