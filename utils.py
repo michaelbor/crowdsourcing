@@ -76,8 +76,13 @@ def update_steps_status(time_step, tasks_array):
 	
 	
 	
-	
-	
+def update_workers_status(time_step, workers_array):
+	for worker in workers_array:
+		worker.avail_time = max(0, worker.avail_time - time_step)
+		if worker.avail_time == 0:
+			workers_array.remove(worker)
+			
+			
 	
 	
 	

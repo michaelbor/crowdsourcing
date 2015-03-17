@@ -17,7 +17,8 @@ data_workers = np.genfromtxt('input_workers.txt', delimiter=', ', \
 dtype=[('id','i8'),('skills','S5000'), ('avail_time','i8')])
 
 
-workers_array = input.init_workers_from_file(data_workers)
+workers_array = [] 
+input.init_workers_from_file(data_workers, workers_array)
 utils.print_all_workers(workers_array)
 
 tasks_array = input.init_steps_from_file(data_steps)
@@ -32,13 +33,15 @@ for i in range(0,num_of_iterations):
 	
 	print '********* starting iteration '+str(i+1)+',  time: '+str(time)+' **********\n'
 	utils.update_steps_status(time_step, tasks_array)
+	utils.update_workers_status(time_step, workers_array)
 	steps_for_allocation = utils.extract_steps_for_allocation(tasks_array)
 	utils.print_steps_for_allocation(steps_for_allocation)
 	algo.allocate_jobs(steps_for_allocation, workers_array)
-	workers_array = input.init_workers_from_file(data_workers)
+	input.init_workers_from_file(data_workers, workers_array)
 
 	time = time + time_step
 
 
 utils.print_all_tasks(tasks_array)
+utils.print_all_workers(workers_array)
 

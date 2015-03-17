@@ -18,15 +18,15 @@ def parse_skills_steps(skills_string):
 
 				
 
-def init_workers_from_file(data):
-	workers_array=[]
+def init_workers_from_file(data, workers_array):
+	#workers_array=[]
 	for i in range(0,len(data)):
 		new_worker = Worker(data[i]['id'],\
 		parse_skills_workers(data[i]['skills']),\
 		data[i]['avail_time'])
 		workers_array.extend([new_worker]);
 		
-	return workers_array
+	#return workers_array
 	
 	
 def init_steps_from_file(data):
