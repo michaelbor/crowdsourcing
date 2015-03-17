@@ -1,3 +1,5 @@
+import stats
+
 
 def print_all_tasks(tasks_array):
 	print "printing all tasks:"
@@ -64,8 +66,6 @@ def unlock_next_steps(cur_step, steps_array):
 	
 
 
-
-	
 	
 def update_steps_status(time_step, tasks_array):
 	for task in tasks_array:
@@ -81,6 +81,7 @@ def update_steps_status(time_step, tasks_array):
 def update_workers_status(time_step, workers_array):
 	for worker in workers_array:
 		worker.avail_time = max(0, worker.avail_time - time_step)
+		stats.wasted_workers_time = stats.wasted_workers_time + min(time_step, worker.avail_time)
 		if worker.avail_time == 0:
 			workers_array.remove(worker)
 			
