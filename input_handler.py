@@ -1,6 +1,7 @@
 from step_class import Step
 from task_class import Task
 from worker_class import Worker
+import utils
 
 def parse_skills_workers(skills_string):
 	k = skills_string.translate(None,'[]')
@@ -49,7 +50,7 @@ def init_steps_from_file(data):
 	tasks_array = tasks_dict.values()
 	for i in tasks_array:
 		i.sort_steps_ordering()
-		i.set_task_arr_time()
+		#i.set_task_arr_time()
 		# now lets unlock first step of each task
 		order_of_first = i.steps_array[0].order
 		for step in i.steps_array:
@@ -58,8 +59,9 @@ def init_steps_from_file(data):
 			else:
 				break
 	
-	tasks_array.sort(key=lambda x: x.arr_time)
-	tasks_array.sort(key=lambda x: x.task_prio,reverse=True)
+	utils.sort_tasks(tasks_array)
+	#tasks_array.sort(key=lambda x: x.arr_time)
+	#tasks_array.sort(key=lambda x: x.task_prio,reverse=True)
 	return tasks_array
 	
 		

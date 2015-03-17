@@ -34,9 +34,9 @@ for i in range(0,num_of_iterations):
 	print '********* starting iteration '+str(i+1)+',  time: '+str(time)+' **********\n'
 	utils.update_steps_status(time_step, tasks_array)
 	utils.update_workers_status(time_step, workers_array)
-	steps_for_allocation = utils.extract_steps_for_allocation(tasks_array)
+	steps_for_allocation = utils.extract_steps_for_allocation(tasks_array, time)
 	utils.print_steps_for_allocation(steps_for_allocation)
-	algo.allocate_jobs(steps_for_allocation, workers_array)
+	algo.allocate_jobs(steps_for_allocation, workers_array, time)
 	input.init_workers_from_file(data_workers, workers_array)
 
 	time = time + time_step

@@ -19,7 +19,7 @@ def is_step_fully_scheduled(step):
 	return True
 
 				
-def allocate_jobs(steps_array, workers_array):
+def allocate_jobs(steps_array, workers_array, current_time):
 
 	for step in steps_array:
 		for skill in step.skills:
@@ -39,7 +39,8 @@ def allocate_jobs(steps_array, workers_array):
 				reset_used_time(workers_array) #skill can't be allocated now. 
 		
 		if is_step_fully_scheduled(step) == True:
-			step.isFullyScheduled = True 
+			step.isFullyScheduled = True
+			step.in_system_time = current_time + step.timeToFinish - step.arr_time 
 				
 	utils.print_steps_after_allocation(steps_array)		
 	return	

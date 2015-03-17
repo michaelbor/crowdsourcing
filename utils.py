@@ -36,13 +36,15 @@ def print_steps_after_allocation(steps):
 		
 	print "---------------------------------------------\n"
 
-def extract_steps_for_allocation(tasks_array):
+def extract_steps_for_allocation(tasks_array, current_time):
 	steps_for_allocation=[]
 	isPrevCompleted = True
 	prevOrder = -1
 	for task in tasks_array:
 		for step in task.steps_array:
-			if step.isFullyScheduled == False and step.isLocked == False:
+			if step.isFullyScheduled == False and \
+			step.isLocked == False and \
+			step.arr_time <= current_time:
 				steps_for_allocation.extend([step])
 			
 	return steps_for_allocation
@@ -83,6 +85,13 @@ def update_workers_status(time_step, workers_array):
 			workers_array.remove(worker)
 			
 			
+	
+def sort_tasks(tasks_array):
+	for task in tasks_array:
+		task.set_task_arr_time()
+	
+	tasks_array.sort(key=lambda x: x.arr_time)
+	tasks_array.sort(key=lambda x: x.task_prio,reverse=True)
 	
 	
 	
