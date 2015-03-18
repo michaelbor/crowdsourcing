@@ -1,6 +1,6 @@
 import random
 import params
-
+import numpy as np
 
 
 	
@@ -15,7 +15,7 @@ def random_steps():
 
 	for i in range(0, params.num_of_steps):
 		id = i
-		arr_time = round(prev_time + random.random() * params.arr_time_var, 1) 
+		arr_time = round(prev_time + random.random() * params.arr_time_avg_gap, 1) 
 		prev_time = arr_time
 		num_of_skills = random.randint(1, params.max_num_of_skills)
 		skills_seq = random.sample(range(1, params.max_num_of_skills + 1), num_of_skills)
@@ -57,7 +57,10 @@ def random_workers():
 	thefile = open('input_workers1.txt', 'w')	
 	thefile.write("#id, skills, avail_time\n")
 	
-	for i in range(0, params.num_of_workers):
+	new_workers_per_time_step = (params.num_of_new_workers_per_hour * params.time_step) / 3600 
+	num_of_workers = max(2, np.random.poisson(new_workers_per_time_step))
+	
+	for i in range(0, num_of_workers):
 		id = i
 		num_of_skills = random.randint(1, params.max_num_of_skills)
 		skills_seq = random.sample(range(1, params.max_num_of_skills + 1), num_of_skills)

@@ -74,9 +74,9 @@ def update_steps_status(tasks_array):
 	
 def update_workers_status(workers_array):
 	for worker in workers_array:
-		worker.avail_time = max(0, worker.avail_time - params.time_step)
 		stats.wasted_workers_time = stats.wasted_workers_time + \
 		min(params.time_step, worker.avail_time)
+		worker.avail_time = max(0, worker.avail_time - params.time_step)
 		if worker.avail_time == 0:
 			workers_array.remove(worker)
 			
@@ -98,6 +98,7 @@ def is_all_steps_fully_scheduled(tasks_array):
 			
 	return True
 		
+
 	
 	
 	

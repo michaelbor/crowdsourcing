@@ -2,6 +2,7 @@ from step_class import Step
 from task_class import Task
 from worker_class import Worker
 import utils
+import stats
 
 def parse_skills_workers(skills_string):
 	k = skills_string.translate(None,'[]')
@@ -20,14 +21,14 @@ def parse_skills_steps(skills_string):
 				
 
 def init_workers_from_file(data, workers_array):
-	#workers_array=[]
 	for i in range(0,len(data)):
 		new_worker = Worker(data[i]['id'],\
 		parse_skills_workers(data[i]['skills']),\
 		data[i]['avail_time'])
 		workers_array.extend([new_worker]);
+		stats.total_available_work_time = stats.total_available_work_time +\
+		new_worker.avail_time
 		
-	#return workers_array
 	
 	
 def init_steps_from_file(data):
