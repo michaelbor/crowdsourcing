@@ -1,4 +1,5 @@
 import stats
+import params
 
 
 def print_all_tasks(tasks_array):
@@ -21,17 +22,10 @@ def print_all_workers(workers_array):
 	print "---------------------------------------------\n"
 
 
-def print_steps_for_allocation(steps):
-	print "printing steps for allocation:"
-	print "---------------------------------------------"
-	for i in steps:
-		print i.print_step()
-		
-	print "---------------------------------------------\n"
-	
 
-def print_steps_after_allocation(steps):
-	print "printing steps after allocation:"
+
+def print_steps(steps):
+	print "printing steps:"
 	print "---------------------------------------------"
 	for i in steps:
 		print i.print_step()
@@ -67,21 +61,22 @@ def unlock_next_steps(cur_step, steps_array):
 
 
 	
-def update_steps_status(time_step, tasks_array):
+def update_steps_status(tasks_array):
 	for task in tasks_array:
 		for step in task.steps_array:
 			if step.isCompleted == False:
-				step.timeToFinish = max(0, step.timeToFinish - time_step)
+				step.timeToFinish = max(0, step.timeToFinish - params.time_step)
 				if step.isFullyScheduled == True and step.timeToFinish == 0:
 					step.isCompleted = True
 					unlock_next_steps(step, task.steps_array)
 	
 	
 	
-def update_workers_status(time_step, workers_array):
+def update_workers_status(workers_array):
 	for worker in workers_array:
-		worker.avail_time = max(0, worker.avail_time - time_step)
-		stats.wasted_workers_time = stats.wasted_workers_time + min(time_step, worker.avail_time)
+		worker.avail_time = max(0, worker.avail_time - params.time_step)
+		stats.wasted_workers_time = stats.wasted_workers_time + \
+		min(params.time_step, worker.avail_time)
 		if worker.avail_time == 0:
 			workers_array.remove(worker)
 			
@@ -94,7 +89,15 @@ def sort_tasks(tasks_array):
 	tasks_array.sort(key=lambda x: x.arr_time)
 	tasks_array.sort(key=lambda x: x.task_prio,reverse=True)
 	
-	
+
+def is_all_steps_fully_scheduled(tasks_array):
+	for task in tasks_array:
+		for step in task.steps_array:
+			if step.isFullyScheduled == False:
+				return False
+			
+	return True
+		
 	
 	
 	

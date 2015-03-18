@@ -36,7 +36,7 @@ class Task:
 				self.arr_time = i.arr_time
 				return
 				
-		print 'Error: all steps for this task were completed'
+		#print 'Info: all steps for task '+str(self.id)+' were completed'
 		self.arr_time = -1
 		
 		

@@ -42,7 +42,7 @@ def allocate_jobs(steps_array, workers_array, current_time):
 			step.isFullyScheduled = True
 			step.in_system_time = current_time + step.timeToFinish - step.arr_time 
 				
-	utils.print_steps_after_allocation(steps_array)		
+	#utils.print_steps_after_allocation(steps_array)		
 	return	
 	
 		
