@@ -69,11 +69,11 @@ t1 = time()
 work_stat = stats.avg_and_total_work_time(tasks_array)
 remaining_time = stats.total_avail_time(workers_array)
 
-#print str(stats.total_available_work_time)+' =? '\
-#+str(work_stat[1]+stats.wasted_workers_time + remaining_time)
+print str(stats.total_available_work_time)+' =? '\
++str(work_stat[1]+stats.wasted_workers_time + remaining_time)
 
-#print str(stats.total_available_work_time)+' =? '\
-#+str(stats.total_work_time + stats.wasted_workers_time + remaining_time)
+print str(stats.total_available_work_time)+' =? '\
++str(stats.total_work_time + stats.wasted_workers_time + remaining_time)
 
 print '--------- statistics -----------------------------'
 print 'steps: avg_in_system_time/avg_work_time = ' + \

@@ -34,15 +34,13 @@ def print_steps(steps):
 
 def extract_steps_for_allocation(tasks_array, current_time):
 	steps_for_allocation=[]
-	isPrevCompleted = True
-	prevOrder = -1
 	for task in tasks_array:
 		for step in task.steps_array:
-			if step.isFullyScheduled == False and \
-			step.isLocked == False and \
-			step.arr_time <= current_time:
+			if step.isLocked == True:
+				break
+			elif step.isFullyScheduled == False and step.arr_time <= current_time:
 				steps_for_allocation.extend([step])
-			
+					
 	return steps_for_allocation
 	
 	
@@ -64,7 +62,9 @@ def unlock_next_steps(cur_step, steps_array):
 def update_steps_status(tasks_array):
 	for task in tasks_array:
 		for step in task.steps_array:
-			if step.isCompleted == False:
+			if step.isLocked == True:
+				break
+			elif step.isCompleted == False:
 				step.timeToFinish = max(0, step.timeToFinish - params.time_step)
 				if step.isFullyScheduled == True and step.timeToFinish == 0:
 					step.isCompleted = True
@@ -92,12 +92,14 @@ def sort_tasks(tasks_array):
 	
 
 def is_all_steps_fully_scheduled(tasks_array):
-	for task in tasks_array:
-		for step in task.steps_array:
-			if step.isFullyScheduled == False:
-				return False
-			
-	return True
+	#for task in tasks_array:
+	#	for step in task.steps_array:
+	#		if step.isFullyScheduled == False:
+	#			return False
+	if stats.fully_scheduled_steps == params.num_of_steps:
+		return True
+	else:
+		return False
 		
 
 	

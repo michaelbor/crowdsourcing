@@ -32,7 +32,7 @@ class Task:
 		
 	def set_task_arr_time(self):
 		for i in self.steps_array:
-			if i.isCompleted == False:
+			if i.isFullyScheduled == False:
 				self.arr_time = i.arr_time
 				return
 				
