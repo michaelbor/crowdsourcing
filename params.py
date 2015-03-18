@@ -1,9 +1,9 @@
 #parameters for input generation
 
-num_of_steps = 40000
+num_of_steps = 8000
 num_of_tasks = 100
 #num_of_workers = 10
-num_of_new_workers_per_hour = 100
+num_of_new_workers_per_hour = 400
 
 
 max_num_of_skills = 3
