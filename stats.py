@@ -7,6 +7,7 @@ fully_scheduled_steps = 0
 completed_steps = 0
 
 
+
 def avg_in_system_time(tasks_array):
 	acc = 0
 	count = 0
