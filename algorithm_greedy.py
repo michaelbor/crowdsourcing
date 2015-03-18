@@ -42,6 +42,7 @@ def allocate_jobs(steps_array, workers_array, current_time):
 		
 		if is_step_fully_scheduled(step) == True:
 			step.isFullyScheduled = True
+			stats.fully_scheduled_steps += 1 
 			step.in_system_time = current_time + step.timeToFinish - step.arr_time 
 		
 				

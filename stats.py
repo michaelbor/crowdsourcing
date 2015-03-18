@@ -3,6 +3,9 @@ from __future__ import division
 wasted_workers_time = 0
 total_available_work_time = 0
 total_work_time = 0
+fully_scheduled_steps = 0
+completed_steps = 0
+
 
 def avg_in_system_time(tasks_array):
 	acc = 0

@@ -68,6 +68,7 @@ def update_steps_status(tasks_array):
 				step.timeToFinish = max(0, step.timeToFinish - params.time_step)
 				if step.isFullyScheduled == True and step.timeToFinish == 0:
 					step.isCompleted = True
+					stats.completed_steps += 1
 					unlock_next_steps(step, task.steps_array)
 	
 	

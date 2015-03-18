@@ -31,11 +31,18 @@ time = 0
 
 for i in range(0, params.max_num_of_iterations):
 	
-	if i % 10 == 0:
-		print '*** starting iteration '+str(i+1)+',  time: '+str(time)
+	if i % max(1, int(params.num_of_steps/100)) == 0:
+		print '*** starting iteration '+str(i+1)+',  time: '+str(time)+\
+		'. [full sched: '+str(stats.fully_scheduled_steps)+\
+		', comp: '+str(stats.completed_steps)+\
+		', total: '+str(params.num_of_steps)+']'
 	
 	
 	if utils.is_all_steps_fully_scheduled(tasks_array):
+		print '*** starting iteration '+str(i+1)+',  time: '+str(time)+\
+		'. [full sched: '+str(stats.fully_scheduled_steps)+\
+		', comp: '+str(stats.completed_steps)+\
+		', total: '+str(params.num_of_steps)+']'
 		print '*** All steps are fully scheduled at iteration '+ str(i+1)+ '. Stopping simulation. ***\n'
 		break
 		
