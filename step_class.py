@@ -1,3 +1,4 @@
+import stats 
 
 class Step:
 	""" Class that represents any step """
@@ -16,6 +17,7 @@ class Step:
 		self.timeToFinish = 0
 		self.in_system_time = 0
 		self.total_skills_time = sum([x[1] for x in skills])
+		stats.total_skills_requirements_time += self.total_skills_time
 				
         
 	def print_step(self):

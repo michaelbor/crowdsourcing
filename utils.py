@@ -69,7 +69,12 @@ def update_steps_status(tasks_array):
 				if step.isFullyScheduled == True and step.timeToFinish == 0:
 					step.isCompleted = True
 					stats.completed_steps += 1
+					stats.total_steps_in_system_time += step.in_system_time
 					unlock_next_steps(step, task.steps_array)
+					task.steps_array.remove(step)
+					
+		if len(task.steps_array) == 0:
+			tasks_array.remove(task)
 	
 	
 	

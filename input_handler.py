@@ -1,3 +1,4 @@
+import numpy as np
 from step_class import Step
 from task_class import Task
 from worker_class import Worker
@@ -20,7 +21,9 @@ def parse_skills_steps(skills_string):
 
 				
 
-def init_workers_from_file(data, workers_array):
+def init_workers_from_file(filename, workers_array):
+	data = np.genfromtxt(filename, delimiter=', ', \
+	dtype=[('id','i8'),('skills','S5000'), ('avail_time','i8')])
 	for i in range(0,len(data)):
 		new_worker = Worker(data[i]['id'],\
 		parse_skills_workers(data[i]['skills']),\
@@ -31,12 +34,18 @@ def init_workers_from_file(data, workers_array):
 		
 	
 	
-def init_steps_from_file(data):
+def init_steps_from_file(filename, tasks_array):
 	'''
 	Initializing tasks dictionary that will hold all the tasks objects. 
 	These objects can be accessible by task_id.
 	'''
+	data = np.genfromtxt(filename, delimiter=', ', \
+	dtype=[('id','i8'), ('arr_time','f8'), ('task_id','i8'),\
+ 	('skills','S5000'), ('task_prio','i8'), ('order','i8')])
 	tasks_dict = {}
+	
+	#insert here to the dictionary the tasks from tasks_array !!!!!
+	
 	for i in range(0,len(data)):
 		if tasks_dict.has_key(data[i]['task_id']) == False:
 			tasks_dict[data[i]['task_id']] = Task(data[i]['task_id'], data[i]['task_prio'])
@@ -47,8 +56,11 @@ def init_steps_from_file(data):
 	'''
 	From now we don't need the dictionary, but only a list. Since we will need to sort tasks.
 	'''
-	tasks_array = []
-	tasks_array = tasks_dict.values()
+	#tasks_array = []
+	#tasks_array = tasks_dict.values()
+	for task in tasks_dict.values():
+		tasks_array.extend([task])
+		
 	for i in tasks_array:
 		i.sort_steps_ordering()
 		#i.set_task_arr_time()
@@ -61,8 +73,9 @@ def init_steps_from_file(data):
 				break
 	
 	utils.sort_tasks(tasks_array)
+	print 'num of tasks: '+str(len(tasks_array))
 	#tasks_array.sort(key=lambda x: x.arr_time)
 	#tasks_array.sort(key=lambda x: x.task_prio,reverse=True)
-	return tasks_array
+	#return tasks_array
 	
 		
