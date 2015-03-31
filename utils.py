@@ -1,5 +1,8 @@
+from __future__ import division
 import stats
 import params
+from time import time
+
 
 
 def print_all_tasks(tasks_array):
@@ -107,7 +110,19 @@ def is_all_steps_fully_scheduled(tasks_array):
 		return False
 		
 
+def print_statistics():
+	print '--------- statistics -----------------------------'
+	if stats.completed_steps > 0 and stats.total_work_time > 0 and stats.fully_scheduled_steps > 0:
+		print 'steps: avg_in_system_time/avg_work_time = ' + \
+		str(round((stats.total_steps_in_system_time/stats.completed_steps)/(stats.total_work_time/stats.fully_scheduled_steps),3))
+		
 	
+	if stats.total_available_work_time > 0:
+		print 'workers: total_work_time/total_avail_time = ' + \
+		str(round(stats.total_work_time/stats.total_available_work_time,8)*100)+'%'
+	
+	print 'running time: '+str(round(time()-stats.t_start,3))+' sec'
+	print '--------------------------------------------------\n'	
 	
 	
 	

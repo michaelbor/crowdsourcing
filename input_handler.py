@@ -45,13 +45,20 @@ def init_steps_from_file(filename, tasks_array):
 	tasks_dict = {}
 	
 	#insert here to the dictionary the tasks from tasks_array !!!!!
+	for task in tasks_array:
+		tasks_dict[task.id] = task
+	
+	#clear the task_array
+	del tasks_array[:]
 	
 	for i in range(0,len(data)):
 		if tasks_dict.has_key(data[i]['task_id']) == False:
 			tasks_dict[data[i]['task_id']] = Task(data[i]['task_id'], data[i]['task_prio'])
 	
-		s = Step(data[i]['id'], data[i]['arr_time'], data[i]['task_id'], parse_skills_steps(data[i]['skills']), data[i]['task_prio'],data[i]['order'])
+		s = Step(data[i]['id'], data[i]['arr_time'], data[i]['task_id'], \
+		parse_skills_steps(data[i]['skills']), data[i]['task_prio'],data[i]['order'])
 		tasks_dict[data[i]['task_id']].add_step(s)
+		stats.total_steps_entered_system += 1
 		
 	'''
 	From now we don't need the dictionary, but only a list. Since we will need to sort tasks.
@@ -73,7 +80,7 @@ def init_steps_from_file(filename, tasks_array):
 				break
 	
 	utils.sort_tasks(tasks_array)
-	print 'num of tasks: '+str(len(tasks_array))
+	#print 'num of tasks: '+str(len(tasks_array))
 	#tasks_array.sort(key=lambda x: x.arr_time)
 	#tasks_array.sort(key=lambda x: x.task_prio,reverse=True)
 	#return tasks_array

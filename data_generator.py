@@ -52,14 +52,14 @@ def random_steps_one_time():
 	
 
 
-def random_steps():
+def random_steps(cur_time):
 	
-	prev_time = 0
+	prev_time = cur_time
 	steps_per_task = [0]* params.num_of_tasks
 	tasks_prio = [0]* params.num_of_tasks
 
 	new_steps_per_time_step = (params.num_of_new_steps_per_hour * params.time_step) / 3600 
-	num_of_steps = max(2, np.random.poisson(new_workers_per_time_step))
+	num_of_steps = max(2, np.random.poisson(new_steps_per_time_step))
 
 	thefile = open('input_steps2.txt', 'w')	
 	thefile.write("#id, arr_time, task_id, skills, task_prio, order\n")

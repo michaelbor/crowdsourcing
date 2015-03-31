@@ -7,6 +7,9 @@ total_skills_requirements_time = 0 #should be the same as total_work_time
 fully_scheduled_steps = 0
 completed_steps = 0
 total_steps_in_system_time = 0
+total_steps_entered_system = 0
+t_start = 0
+t_end = 0
 
 
 
