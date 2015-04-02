@@ -35,13 +35,13 @@ def print_steps(steps):
 		
 	print "---------------------------------------------\n"
 
-def extract_steps_for_allocation(tasks_array, current_time):
+def extract_steps_for_allocation(tasks_array):
 	steps_for_allocation=[]
 	for task in tasks_array:
 		for step in task.steps_array:
 			if step.isLocked == True:
 				break
-			elif step.isFullyScheduled == False and step.arr_time <= current_time:
+			elif step.isFullyScheduled == False and step.arr_time <= stats.cur_time:
 				steps_for_allocation.extend([step])
 					
 	return steps_for_allocation
@@ -56,6 +56,7 @@ def unlock_next_steps(cur_step, steps_array):
 		for i in range(idx+1, len(steps_array)):
 			if steps_array[i].order == order_of_first:
 				steps_array[i].isLocked = False
+				steps_array[i].waiting_time = stats.cur_time - steps_array[i].arr_time + params.time_step
 			else:
 				break
 	
@@ -72,7 +73,7 @@ def update_steps_status(tasks_array):
 				if step.isFullyScheduled == True and step.timeToFinish == 0:
 					step.isCompleted = True
 					stats.completed_steps += 1
-					stats.total_steps_in_system_time += step.in_system_time
+					#stats.total_steps_in_system_time += step.in_system_time
 					unlock_next_steps(step, task.steps_array)
 					task.steps_array.remove(step)
 					
@@ -114,12 +115,13 @@ def print_statistics():
 	print '--------- statistics -----------------------------'
 	if stats.completed_steps > 0 and stats.total_work_time > 0 and stats.fully_scheduled_steps > 0:
 		print 'steps: avg_in_system_time/avg_work_time = ' + \
-		str(round((stats.total_steps_in_system_time/stats.completed_steps)/(stats.total_work_time/stats.fully_scheduled_steps),3))
-		
+		str(round((stats.total_steps_in_system_time)/(stats.total_work_time),3))
+		print stats.total_waiting_time/stats.total_steps_in_system_time
 	
 	if stats.total_available_work_time > 0:
 		print 'workers: total_work_time/total_avail_time = ' + \
 		str(round(stats.total_work_time/stats.total_available_work_time,8)*100)+'%'
+	
 	
 	print 'running time: '+str(round(time()-stats.t_start,3))+' sec'
 	print '--------------------------------------------------\n'	

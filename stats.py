@@ -1,4 +1,5 @@
-from __future__ import division
+#from __future__ import division
+import params
 
 wasted_workers_time = 0
 total_available_work_time = 0
@@ -10,8 +11,8 @@ total_steps_in_system_time = 0
 total_steps_entered_system = 0
 t_start = 0
 t_end = 0
-
-
+total_waiting_time = 0
+cur_time = 0
 
 	
 

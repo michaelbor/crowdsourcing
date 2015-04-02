@@ -1,10 +1,11 @@
 import utils
 import stats
+import params
 
 def update_avail_time(workers_array):
 	for worker in workers_array:
-		worker.avail_time = worker.avail_time - worker.used_time
-		stats.total_work_time = stats.total_work_time + worker.used_time
+		worker.avail_time -= worker.used_time
+		#stats.total_work_time += worker.used_time
 		worker.used_time = 0
 		
 		
@@ -21,7 +22,7 @@ def is_step_fully_scheduled(step):
 	return True
 
 				
-def allocate_jobs(steps_array, workers_array, current_time):
+def allocate_jobs(steps_array, workers_array):
 	for step in steps_array:			
 		for skill in step.skills:
 			required_time = skill[1]
@@ -46,8 +47,16 @@ def allocate_jobs(steps_array, workers_array, current_time):
 		if is_step_fully_scheduled(step) == True:
 			step.isFullyScheduled = True
 			stats.fully_scheduled_steps += 1 
-			step.in_system_time = current_time + step.timeToFinish - step.arr_time 
-		
+			step.in_system_time = stats.cur_time + step.timeToFinish - step.arr_time 
+			stats.total_steps_in_system_time += step.in_system_time
+			stats.total_work_time += step.total_skills_time
+			stats.total_waiting_time += step.waiting_time
+
+		elif step.timeToFinish == 0: #this means that no new skill is scheduled, i.e., pure waiting
+			step.waiting_time += params.time_step
+			
+			
+			
 				
 	#utils.print_steps_after_allocation(steps_array)		
 	return	

@@ -12,7 +12,6 @@ from time import time
 
 #gen.random_steps_one_time()
 
-my_time = 0
 
 workers_array = [] 
 gen.random_workers()
@@ -30,7 +29,7 @@ tasks_array[1].add_step(s)
 utils.print_all_tasks(tasks_array)
 '''
 
-gen.random_steps(my_time)
+gen.random_steps()
 input.init_steps_from_file('input_steps2.txt', tasks_array)
 utils.print_all_tasks(tasks_array)
 
@@ -38,10 +37,12 @@ utils.print_all_tasks(tasks_array)
 
 stats.t_start = time() #measuring running time of the simulation
 
+stats.cur_time += params.time_step 
+
 for i in range(0, params.max_num_of_iterations):
 	
 	if i % max(1, int(params.num_of_steps/100)) == 0:
-		print '*** starting iteration '+str(i+1)+',  time: '+str(my_time)+\
+		print '*** starting iteration '+str(i+1)+',  time: '+str(stats.cur_time)+\
 		'. [full sched: '+str(stats.fully_scheduled_steps)+\
 		', comp: '+str(stats.completed_steps)+\
 		', total: '+str(stats.total_steps_entered_system)+']'
@@ -56,22 +57,20 @@ for i in range(0, params.max_num_of_iterations):
 		print '*** All steps are fully scheduled at iteration '+ str(i+1)+ '. Stopping simulation. ***\n'
 		break
 	'''	
-	steps_for_allocation = utils.extract_steps_for_allocation(tasks_array, my_time)
-	#utils.print_steps(steps_for_allocation)
-	#print len(steps_for_allocation)
-	algo.allocate_jobs(steps_for_allocation, workers_array, my_time)
+	steps_for_allocation = utils.extract_steps_for_allocation(tasks_array)
+	algo.allocate_jobs(steps_for_allocation, workers_array)
 	#utils.print_steps(steps_for_allocation)
 	
 	utils.update_steps_status(tasks_array)
 	utils.update_workers_status(workers_array)
 	gen.random_workers()
 	input.init_workers_from_file('input_workers1.txt', workers_array)
-	gen.random_steps(my_time)
+	gen.random_steps()
 	input.init_steps_from_file('input_steps2.txt', tasks_array)
 	
 	utils.sort_tasks(tasks_array) #needed since the arr_time of a task may change
 	
-	my_time = my_time + params.time_step
+	stats.cur_time += params.time_step
 
 stats.t_end = time()
 

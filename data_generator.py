@@ -1,5 +1,6 @@
 import random
 import params
+import stats
 import numpy as np
 
 
@@ -52,9 +53,9 @@ def random_steps_one_time():
 	
 
 
-def random_steps(cur_time):
+def random_steps():
 	
-	prev_time = cur_time
+	prev_time = stats.cur_time
 	steps_per_task = [0]* params.num_of_tasks
 	tasks_prio = [0]* params.num_of_tasks
 
@@ -65,7 +66,7 @@ def random_steps(cur_time):
 	thefile.write("#id, arr_time, task_id, skills, task_prio, order\n")
 
 	for i in range(0, num_of_steps):
-		id = i
+		id = i + stats.total_steps_entered_system
 		arr_time = round(prev_time + random.random() * params.arr_time_avg_gap, 1) 
 		prev_time = arr_time
 		num_of_skills = random.randint(1, params.max_num_of_skills)

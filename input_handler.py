@@ -24,13 +24,27 @@ def parse_skills_steps(skills_string):
 def init_workers_from_file(filename, workers_array):
 	data = np.genfromtxt(filename, delimiter=', ', \
 	dtype=[('id','i8'),('skills','S5000'), ('avail_time','i8')])
+	
+	#first, let's read everything into dictionary in order to combine workers with the same id	
+	workers_dict = {}
+	for worker in workers_array:
+		workers_dict[worker.id] = worker
+		
+	#notice, we assume that a worker always has the same set of skills
 	for i in range(0,len(data)):
-		new_worker = Worker(data[i]['id'],\
-		parse_skills_workers(data[i]['skills']),\
-		data[i]['avail_time'])
-		workers_array.extend([new_worker]);
-		stats.total_available_work_time = stats.total_available_work_time +\
-		new_worker.avail_time
+		if workers_dict.has_key(data[i]['id']) == False:
+			new_worker = Worker(data[i]['id'],\
+			parse_skills_workers(data[i]['skills']),\
+			data[i]['avail_time'])
+			workers_dict[data[i]['id']] = new_worker
+		else:
+			workers_dict[data[i]['id']].avail_time += data[i]['avail_time']
+				
+		stats.total_available_work_time += data[i]['avail_time']
+		
+	del workers_array[:]
+	for worker in workers_dict.values():
+		workers_array.extend([worker])
 		
 	
 	
