@@ -117,7 +117,8 @@ def random_workers():
 		id = i
 		num_of_skills = random.randint(1, params.max_num_of_skills)
 		skills_seq = random.sample(range(1, params.max_num_of_skills + 1), num_of_skills)
-		avail_time = num_of_skills * random.randint(params.min_skill_time, params.max_skill_time)
+		avail_time = random.randint(params.avail_time_avg - params.avail_time_avg/2, \
+		params.avail_time_avg + params.avail_time_avg/2)
 		
 		thefile.write("%s, " % id)
 		

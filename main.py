@@ -58,6 +58,7 @@ for i in range(0, params.max_num_of_iterations):
 		break
 	'''	
 	steps_for_allocation = utils.extract_steps_for_allocation(tasks_array)
+	#algo.allocate_jobs_skills_no_split(steps_for_allocation, workers_array)
 	algo.allocate_jobs(steps_for_allocation, workers_array)
 	#utils.print_steps(steps_for_allocation)
 	

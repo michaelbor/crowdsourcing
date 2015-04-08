@@ -117,6 +117,7 @@ def print_statistics():
 		print 'steps: avg_in_system_time/avg_work_time = ' + \
 		str(round((stats.total_steps_in_system_time)/(stats.total_work_time),3))
 		print stats.total_waiting_time/stats.total_steps_in_system_time
+		print 'backlogged steps: '+str(stats.total_steps_entered_system - stats.fully_scheduled_steps)
 	
 	if stats.total_available_work_time > 0:
 		print 'workers: total_work_time/total_avail_time = ' + \
