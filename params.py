@@ -6,10 +6,11 @@ num_of_new_workers_per_hour = 300
 
 num_of_new_steps_per_hour = 20
 
-max_num_of_skills = 3
+max_num_of_skills_steps = 3
+max_num_of_skills_worker = 20
 max_skill_time = 6000
 min_skill_time = 500
-avail_time_avg = 1000
+avail_time_avg = 5000
 
 arr_time_avg_gap = 10
 max_prio = 20

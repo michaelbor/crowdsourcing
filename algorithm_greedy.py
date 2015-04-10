@@ -83,10 +83,40 @@ def allocate_jobs_skills_no_split(steps_array, workers_array):
 
 		elif step.timeToFinish == 0: #this means that no new skill is scheduled, i.e., pure waiting
 			step.waiting_time += params.time_step
-			
-		
+				
 	return	
-	
+
+
+
+def allocate_jobs_steps_no_split(steps_array, workers_array):
+	for step in steps_array:			
+		step_skills_array = []
+		for skill in step.skills:
+			step_skills_array.extend([skill[0]])
+					
+		for worker in workers_array:
+			
+			if set(step_skills_array).issubset(worker.skills) is True and\
+			worker.avail_time >= step.total_skills_time:
+				worker.used_time = step.total_skills_time
+				update_avail_time([worker])
+				step.timeToFinish = max(step.timeToFinish, step.total_skills_time)
+				for skill in step.skills:
+					skill[1] = 0
+				
+				step.isFullyScheduled = True
+				stats.fully_scheduled_steps += 1 
+				step.in_system_time = stats.cur_time + step.timeToFinish - step.arr_time 
+				stats.total_steps_in_system_time += step.in_system_time
+				stats.total_work_time += step.total_skills_time
+				stats.total_waiting_time += step.waiting_time
+				break
+
+		if step.timeToFinish == 0: #this means that no new skill is scheduled, i.e., pure waiting
+				step.waiting_time += params.time_step
+				
+	return	
+
 		 
         
     

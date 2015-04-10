@@ -18,8 +18,8 @@ def random_steps_one_time():
 		id = i
 		arr_time = round(prev_time + random.random() * params.arr_time_avg_gap, 1) 
 		prev_time = arr_time
-		num_of_skills = random.randint(1, params.max_num_of_skills)
-		skills_seq = random.sample(range(1, params.max_num_of_skills + 1), num_of_skills)
+		num_of_skills = random.randint(1, params.max_num_of_skills_steps)
+		skills_seq = random.sample(range(1, params.max_num_of_skills_steps + 1), num_of_skills)
 		skills = []
 		for i in skills_seq:
 			skills.extend([[i,random.randint(params.min_skill_time, params.max_skill_time)]])
@@ -69,8 +69,8 @@ def random_steps():
 		id = i + stats.total_steps_entered_system
 		arr_time = round(prev_time + random.random() * params.arr_time_avg_gap, 1) 
 		prev_time = arr_time
-		num_of_skills = random.randint(1, params.max_num_of_skills)
-		skills_seq = random.sample(range(1, params.max_num_of_skills + 1), num_of_skills)
+		num_of_skills = random.randint(1, params.max_num_of_skills_steps)
+		skills_seq = random.sample(range(1, params.max_num_of_skills_steps + 1), num_of_skills)
 		skills = []
 		for i in skills_seq:
 			skills.extend([[i,random.randint(params.min_skill_time, params.max_skill_time)]])
@@ -115,8 +115,8 @@ def random_workers():
 	
 	for i in range(0, num_of_workers):
 		id = i
-		num_of_skills = random.randint(1, params.max_num_of_skills)
-		skills_seq = random.sample(range(1, params.max_num_of_skills + 1), num_of_skills)
+		num_of_skills = random.randint(1, params.max_num_of_skills_worker)
+		skills_seq = random.sample(range(1, params.max_num_of_skills_worker + 1), num_of_skills)
 		avail_time = random.randint(params.avail_time_avg - params.avail_time_avg/2, \
 		params.avail_time_avg + params.avail_time_avg/2)
 		
