@@ -28,7 +28,30 @@ def generate_steps_db():
 	
 	thefile.close()
 		
+
+def generate_workers_db():
+
+	thefile = open('workers_db.txt', 'w')
+	thefile.write("#id, skills, avail_time\n")
+	
+	
+	for i in range(0, params.num_of_workers_in_db):
+		id = i
+		num_of_skills = random.randint(1, params.max_num_of_skills_worker)
+		skills_seq = random.sample(range(1, params.max_num_of_skills_worker + 1), num_of_skills)
+		avail_time = random.randint(params.avail_time_avg - params.avail_time_avg/2, \
+		params.avail_time_avg + params.avail_time_avg/2)
 		
+		thefile.write("%s, " % id)
+		
+		skills_string = str(skills_seq)
+		skills_string = skills_string.translate(None,' ')
+		thefile.write(skills_string)		
+		thefile.write(", %s\n" % avail_time)
+
+	thefile.close()
+	
+	
 		
 	
 def random_steps_one_time():

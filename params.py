@@ -24,4 +24,5 @@ max_num_of_iterations = 50000
 
 #params for DB
 num_of_steps_in_db = 344
+num_of_workers_in_db = 2500
 steps_per_task = 2
