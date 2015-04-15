@@ -12,22 +12,14 @@ from time import time
 
 #gen.random_steps_one_time()
 
+gen.generate_steps_db()
+gen.random_steps_from_db('steps_db.txt')
 
 workers_array = [] 
 gen.random_workers()
 input.init_workers_from_file('input_workers1.txt', workers_array)
-#utils.print_all_workers(workers_array)
 
 tasks_array = []
-'''
-tasks_array.extend([Task(1, 333)])
-s = Step(135, 3.33, 1, [[2,20000],[3,400]], 333 ,1)
-tasks_array[0].add_step(s)
-tasks_array.extend([Task(0, 444)])
-s = Step(160, 5.33, 0, [[2,20000],[3,400]], 333 ,1)
-tasks_array[1].add_step(s)
-utils.print_all_tasks(tasks_array)
-'''
 
 gen.random_steps()
 input.init_steps_from_file('input_steps2.txt', tasks_array)
@@ -59,9 +51,9 @@ for i in range(0, params.max_num_of_iterations):
 	'''	
 	steps_for_allocation = utils.extract_steps_for_allocation(tasks_array)
 	
-	#algo.allocate_jobs_steps_no_split(steps_for_allocation, workers_array)
+	algo.allocate_jobs_steps_no_split(steps_for_allocation, workers_array)
 	#algo.allocate_jobs_skills_no_split(steps_for_allocation, workers_array)
-	algo.allocate_jobs(steps_for_allocation, workers_array)
+	#algo.allocate_jobs(steps_for_allocation, workers_array)
 	
 	#utils.print_steps(steps_for_allocation)
 	
@@ -70,6 +62,7 @@ for i in range(0, params.max_num_of_iterations):
 	gen.random_workers()
 	input.init_workers_from_file('input_workers1.txt', workers_array)
 	gen.random_steps()
+	#gen.random_steps_from_db('steps_db.txt')
 	input.init_steps_from_file('input_steps2.txt', tasks_array)
 	
 	utils.sort_tasks(tasks_array) #needed since the arr_time of a task may change

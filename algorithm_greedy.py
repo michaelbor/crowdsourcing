@@ -50,14 +50,12 @@ def allocate_jobs(steps_array, workers_array):
 			stats.total_steps_in_system_time += step.in_system_time
 			stats.total_work_time += step.total_skills_time
 			stats.total_waiting_time += step.waiting_time
+			
 
 		elif step.timeToFinish == 0: #this means that no new skill is scheduled, i.e., pure waiting
 			step.waiting_time += params.time_step
-			
-			
-			
 				
-	#utils.print_steps_after_allocation(steps_array)		
+				
 	return	
 	
 		

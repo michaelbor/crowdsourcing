@@ -101,10 +101,7 @@ def sort_tasks(tasks_array):
 	
 
 def is_all_steps_fully_scheduled(tasks_array):
-	#for task in tasks_array:
-	#	for step in task.steps_array:
-	#		if step.isFullyScheduled == False:
-	#			return False
+
 	if stats.fully_scheduled_steps == params.num_of_steps:
 		return True
 	else:
@@ -114,9 +111,10 @@ def is_all_steps_fully_scheduled(tasks_array):
 def print_statistics():
 	print '--------- statistics -----------------------------'
 	if stats.completed_steps > 0 and stats.total_work_time > 0 and stats.fully_scheduled_steps > 0:
-		print 'steps: avg_in_system_time/avg_work_time = ' + \
+		print 'steps: total_steps_in_system_time/total_work_time = ' + \
 		str(round((stats.total_steps_in_system_time)/(stats.total_work_time),3))
-		print stats.total_waiting_time/stats.total_steps_in_system_time
+		print 'steps: total_waiting_time/total_steps_in_system_time = ' + \
+		str(round(stats.total_waiting_time/stats.total_steps_in_system_time,4))
 		print 'backlogged steps: '+str(stats.total_steps_entered_system - stats.fully_scheduled_steps)
 	
 	if stats.total_available_work_time > 0:
