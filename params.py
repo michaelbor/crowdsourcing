@@ -7,7 +7,8 @@ num_of_new_workers_per_hour = 300
 num_of_new_steps_per_hour = 200
 
 max_num_of_skills_steps = 3
-max_num_of_skills_worker = 20
+max_num_of_skills_worker = 30
+num_of_existing_skills = 5
 max_skill_time = 6000
 min_skill_time = 500
 avail_time_avg = 5000
@@ -26,3 +27,6 @@ max_num_of_iterations = 50000
 num_of_steps_in_db = 344
 num_of_workers_in_db = 2500
 steps_per_task = 2
+#possible working hours:
+working_hours = [[8,16],[8,12],[12,16],[16,20],[18,20]]
+timezones = range(-12,13)

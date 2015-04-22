@@ -13,6 +13,7 @@ from time import time
 #gen.random_steps_one_time()
 
 gen.generate_workers_db()
+gen.random_workers_from_db('workers_db.txt')
 gen.generate_steps_db()
 gen.random_steps_from_db('steps_db.txt')
 

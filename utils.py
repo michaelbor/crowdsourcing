@@ -126,4 +126,16 @@ def print_statistics():
 	print '--------------------------------------------------\n'	
 	
 	
+def get_local_time_in_hours(timezone):
+	#we assume that the current time is according to timezone 0
+	return (stats.cur_time/3600 + timezone)%24
+
+def get_ready_workers(workers_array):
+	ret = []
+	for worker in workers_array:
+		if worker.is_ready():
+			ret.extend([worker])
+	
+	return ret
+
 	

@@ -32,22 +32,23 @@ def generate_steps_db():
 def generate_workers_db():
 
 	thefile = open('workers_db.txt', 'w')
-	thefile.write("#id, skills, avail_time\n")
+	thefile.write("#id, skills, avail_time_start, avail_time_end, timezone\n")
 	
 	
 	for i in range(0, params.num_of_workers_in_db):
 		id = i
 		num_of_skills = random.randint(1, params.max_num_of_skills_worker)
-		skills_seq = random.sample(range(1, params.max_num_of_skills_worker + 1), num_of_skills)
-		avail_time = random.randint(params.avail_time_avg - params.avail_time_avg/2, \
-		params.avail_time_avg + params.avail_time_avg/2)
-		
-		thefile.write("%s, " % id)
+		skills_seq = random.sample(range(1, params.num_of_existing_skills + 1), min(num_of_skills,params.num_of_existing_skills))
+		#avail_time = random.randint(params.avail_time_avg - params.avail_time_avg/2, \
+		#params.avail_time_avg + params.avail_time_avg/2)
+		[avail_time_start, avail_time_end] = random.sample(params.working_hours, 1)[0]
+		time_zone = random.sample(params.timezones,1)[0]
+		thefile.write("%d, " % id)
 		
 		skills_string = str(skills_seq)
 		skills_string = skills_string.translate(None,' ')
 		thefile.write(skills_string)		
-		thefile.write(", %s\n" % avail_time)
+		thefile.write(", %d, %d, %d\n" % (avail_time_start, avail_time_end, time_zone))
 
 	thefile.close()
 	
@@ -178,6 +179,9 @@ def random_steps_from_db(steps_db_filename):
 		
 		task_prio = random.randint(1, params.max_prio)
 		
+		# make params.steps_per_task random from 1 to k
+		#BUT, for steps_db generate ordinals from 1 to k
+		# reasonable k is 2,3,4,5
 		for j in range(0,params.steps_per_task):
 			
 			step_index = random.sample(np.where(data['order'] == j+1)[0], 1)
@@ -224,6 +228,26 @@ def random_workers():
 		thefile.write(skills_string)
 		
 		thefile.write(", %s\n" % avail_time)
+	
+	thefile.close()
+	
+
+def random_workers_from_db(workers_db_filename):
+		
+	data = np.genfromtxt(workers_db_filename, delimiter=', ', \
+	dtype=[('id','i8'),('skills','S5000'), ('avail_time','i8')])	
+		
+	thefile = open('input_workers_from_db.txt', 'w')	
+	thefile.write("#id, skills, avail_time\n")
+	
+	new_workers_per_time_step = (params.num_of_new_workers_per_hour * params.time_step) / 3600 
+	num_of_workers = max(2, np.random.poisson(new_workers_per_time_step))
+	
+	for i in range(0, num_of_workers):
+		#random_worker_index = ??? #we need to insert workers that are not in the system?
+		#or what should be the workers input process???
+		thefile.write("%s" % str(data['id'][5])+ ", " + \
+		str(data['skills'][5]) + ", " + str(data['avail_time'][5]) + "\n")
 	
 	thefile.close()
 	

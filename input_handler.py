@@ -92,5 +92,23 @@ def init_steps_from_file(filename, tasks_array):
 	
 	utils.sort_tasks(tasks_array)
 	
-	
+
+def init_workers_from_db(filename, workers_array):
+	data = np.genfromtxt(filename, delimiter=', ', \
+	dtype=[('id','i8'),('skills','S5000'), ('avail_time_start','i8'), \
+	('avail_time_end','i8'), ('timezone','i8')])
+		
+	#notice, we assume that a worker always has the same set of skills
+	for i in range(0,len(data)):
+		new_worker = Worker(data[i]['id'],\
+		parse_skills_workers(data[i]['skills']),\
+		data[i]['avail_time_start'],\
+		data[i]['avail_time_end'],\
+		data[i]['timezone'])
+		
+		workers_array.extend([new_worker])
+				
+		#stats.total_available_work_time += data[i]['avail_time']
+		
+		
 		

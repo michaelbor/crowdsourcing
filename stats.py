@@ -12,7 +12,7 @@ total_steps_entered_system = 0
 t_start = 0
 t_end = 0
 total_waiting_time = 0
-cur_time = 0
+cur_time = 0 #in seconds
 total_tasks_generated = 0
 
 	

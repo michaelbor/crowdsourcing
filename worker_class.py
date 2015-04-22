@@ -1,22 +1,37 @@
-
+import utils
 
 class Worker:
-	""" Class that represents any step """
+	""" Class that represents a worker """
 
-	def __init__(self, id, skills, avail_time):
+	def __init__(self, id, skills, avail_time_start, avail_time_end, timezone):
 
 		self.id = id
 		self.skills = skills
-		self.avail_time = avail_time
+		self.avail_time_start = avail_time_start
+		self.avail_time_end = avail_time_end
+		self.avail_time = avail_time_end - avail_time_start
+		self.timezone = timezone
 		self.used_time = 0
+		self.ready_time = avail_time_start
 		
-        
+  	def is_ready(self):
+		t = utils.get_local_time_in_hours(self.timezone)
+		if t >= self.ready_time and t < self.avail_time_end:
+			return 1
+		else:
+			if t >= self.avail_time_end:
+				self.ready_time = self.avail_time_start #reset the ready_time
+			return 0
+      
 	def print_worker(self):
 		return "(" + str(self.id) + "," +str(self.skills)+","\
-		+str(self.avail_time)+")"
+		+str(self.avail_time_start)+","\
+		+str(self.avail_time_end)+","\
+		+str(self.timezone)+","\
+		+str(self.is_ready())+","\
+		+str(utils.get_local_time_in_hours(self.timezone))+")"
         
-    
-		
+
 		
 		
 
