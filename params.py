@@ -31,5 +31,5 @@ steps_per_task = 2
 working_hours = [[8,16],[8,12],[12,16],[16,20],[18,20]]
 timezones = range(-12,13)
 max_ordinal = 3
-num_of_new_tasks_per_hour = 100
+num_of_new_tasks_per_hour = 120
 

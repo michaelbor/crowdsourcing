@@ -9,7 +9,7 @@ import params
 from time import time
 
 
-gen.generate_workers_db()
+#gen.generate_workers_db()
 
 workers_array = []
 input.init_workers_from_db("workers_db.txt", workers_array)
@@ -36,7 +36,7 @@ stats.cur_time += params.time_step
 
 for i in range(0, params.max_num_of_iterations):
 	
-	if i % max(1, int(params.num_of_steps/100)) == 0:
+	if i % 100 == 0:
 		print '*** starting iteration '+str(i+1)+',  time: '+str(stats.cur_time)+\
 		'. [full sched: '+str(stats.fully_scheduled_steps)+\
 		', comp: '+str(stats.completed_steps)+\
@@ -46,7 +46,9 @@ for i in range(0, params.max_num_of_iterations):
 	ready_workers = utils.get_ready_workers(workers_array)
 	steps_for_allocation = utils.extract_steps_for_allocation(tasks_array)
 	
-	algo.allocate_jobs(steps_for_allocation, ready_workers)
+	#algo.allocate_jobs(steps_for_allocation, ready_workers)
+	algo.allocate_jobs_skills_no_split(steps_for_allocation, ready_workers)
+	#algo.allocate_jobs_steps_no_split(steps_for_allocation, ready_workers)
 	
 	utils.update_steps_status(tasks_array)
 	

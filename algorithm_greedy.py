@@ -105,7 +105,7 @@ def allocate_jobs_skills_no_split(steps_array, workers_array):
 	for step in steps_array:			
 		for skill in step.skills:
 			for worker in workers_array:
-				if skill[0] in worker.skills and worker.avail_time >= skill[1]:
+				if skill[0] in worker.skills and worker.get_avail_time_sec() >= skill[1]:
 					worker.used_time = skill[1]
 					update_avail_time([worker])
 					step.timeToFinish = max(step.timeToFinish, skill[1])
@@ -136,7 +136,7 @@ def allocate_jobs_steps_no_split(steps_array, workers_array):
 		for worker in workers_array:
 			
 			if set(step_skills_array).issubset(worker.skills) is True and\
-			worker.avail_time >= step.total_skills_time:
+			worker.get_avail_time_sec() >= step.total_skills_time:
 				worker.used_time = step.total_skills_time
 				update_avail_time([worker])
 				step.timeToFinish = max(step.timeToFinish, step.total_skills_time)
