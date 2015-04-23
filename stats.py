@@ -14,8 +14,7 @@ t_end = 0
 total_waiting_time = 0
 cur_time = 0 #in seconds
 total_tasks_generated = 0
-
-	
+total_available_work_time_per_day = 0
 
 
 

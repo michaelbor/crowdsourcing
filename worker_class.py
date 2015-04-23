@@ -1,4 +1,5 @@
 import utils
+import stats
 
 class Worker:
 	""" Class that represents a worker """
@@ -13,10 +14,15 @@ class Worker:
 		self.timezone = timezone
 		self.used_time = 0
 		self.ready_time = avail_time_start
+		stats.total_available_work_time_per_day += (avail_time_end - avail_time_start)
+	
+	def get_avail_time_sec(self):
+		return 3600*(self.avail_time_end - self.ready_time)
 		
   	def is_ready(self):
 		t = utils.get_local_time_in_hours(self.timezone)
 		if t >= self.ready_time and t < self.avail_time_end:
+			self.ready_time = t
 			return 1
 		else:
 			if t >= self.avail_time_end:

@@ -1,3 +1,4 @@
+from __future__ import division
 import random
 import params
 import stats
@@ -12,7 +13,7 @@ def generate_steps_db():
 	
 	for i in range(0, params.num_of_steps_in_db):
 		id = i
-		ordinal = random.randint(1,2)
+		ordinal = random.randint(1,params.max_ordinal)
 		num_of_skills = random.randint(1, params.max_num_of_skills_steps)
 		skills_seq = random.sample(range(1, params.max_num_of_skills_steps + 1), num_of_skills)
 		skills = []
@@ -163,16 +164,14 @@ def random_steps_from_db(steps_db_filename):
 	dtype=[('id','i8'), ('skills','S5000'), ('order','i8')])
  	
 
-	new_steps_per_time_step = (params.num_of_new_steps_per_hour * params.time_step) / 3600 
-	num_of_steps = max(2, np.random.poisson(new_steps_per_time_step))
-	num_of_tasks = int(num_of_steps/params.steps_per_task)
+	new_tasks_per_time_step = (params.num_of_new_tasks_per_hour * params.time_step) / 3600 
+	num_of_tasks = max(2, np.random.poisson(new_tasks_per_time_step))
 
 	thefile = open('input_steps_from_db.txt', 'w')	
 	thefile.write("#id, arr_time, task_id, skills, task_prio, order\n")
 
 	
 	for i in range(0, num_of_tasks):
-		
 		
 		task_id = stats.total_tasks_generated
 		stats.total_tasks_generated += 1
@@ -182,7 +181,8 @@ def random_steps_from_db(steps_db_filename):
 		# make params.steps_per_task random from 1 to k
 		#BUT, for steps_db generate ordinals from 1 to k
 		# reasonable k is 2,3,4,5
-		for j in range(0,params.steps_per_task):
+		steps_in_task = random.randint(1,params.max_ordinal)
+		for j in range(0,steps_in_task):
 			
 			step_index = random.sample(np.where(data['order'] == j+1)[0], 1)
 			arr_time = round(prev_time + random.random() * params.arr_time_avg_gap, 1)

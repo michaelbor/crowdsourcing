@@ -106,8 +106,13 @@ def is_all_steps_fully_scheduled(tasks_array):
 		return True
 	else:
 		return False
+	
+	
 		
-
+def get_num_of_days_passed():
+	return stats.cur_time/3600/24
+	
+	
 def print_statistics():
 	print '--------- statistics -----------------------------'
 	if stats.completed_steps > 0 and stats.total_work_time > 0 and stats.fully_scheduled_steps > 0:
@@ -115,11 +120,14 @@ def print_statistics():
 		str(round((stats.total_steps_in_system_time)/(stats.total_work_time),3))
 		print 'steps: total_waiting_time/total_steps_in_system_time = ' + \
 		str(round(stats.total_waiting_time/stats.total_steps_in_system_time,4))
+		print 'average waiting time: ' + \
+		str(round(stats.total_waiting_time/stats.fully_scheduled_steps,3)) + ' sec'
 		print 'backlogged steps: '+str(stats.total_steps_entered_system - stats.fully_scheduled_steps)
 	
-	if stats.total_available_work_time > 0:
-		print 'workers: total_work_time/total_avail_time = ' + \
-		str(round(stats.total_work_time/stats.total_available_work_time,8)*100)+'%'
+	if stats.total_available_work_time_per_day > 0:
+		print 'days passed: '+str(round(get_num_of_days_passed(),2))
+		print 'workers utilization: ' + \
+		str(round(stats.total_work_time/(stats.total_available_work_time_per_day*get_num_of_days_passed())/3600,8)*100)+'%'
 	
 	
 	print 'running time: '+str(round(time()-stats.t_start,3))+' sec'
@@ -129,6 +137,8 @@ def print_statistics():
 def get_local_time_in_hours(timezone):
 	#we assume that the current time is according to timezone 0
 	return (stats.cur_time/3600 + timezone)%24
+
+
 
 def get_ready_workers(workers_array):
 	ret = []
