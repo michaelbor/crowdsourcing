@@ -158,7 +158,7 @@ def random_steps():
 	
 def random_steps_from_db(steps_db_filename):
 	
-	prev_time = stats.cur_time
+	prev_time = stats.cur_time - params.time_step 
 	
 	data = np.genfromtxt(steps_db_filename, delimiter=', ', \
 	dtype=[('id','i8'), ('skills','S5000'), ('order','i8')])

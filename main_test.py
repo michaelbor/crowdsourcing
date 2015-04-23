@@ -24,6 +24,7 @@ gen.generate_steps_db()
 gen.random_steps_from_db('steps_db.txt')
 
 
+stats.cur_time += params.time_step 
 
 tasks_array = []
 input.init_steps_from_file('input_steps_from_db.txt', tasks_array)
@@ -32,7 +33,7 @@ input.init_steps_from_file('input_steps_from_db.txt', tasks_array)
 
 stats.t_start = time() #measuring running time of the simulation
 
-stats.cur_time += params.time_step 
+
 
 for i in range(0, params.max_num_of_iterations):
 	
@@ -46,8 +47,8 @@ for i in range(0, params.max_num_of_iterations):
 	ready_workers = utils.get_ready_workers(workers_array)
 	steps_for_allocation = utils.extract_steps_for_allocation(tasks_array)
 	
-	#algo.allocate_jobs(steps_for_allocation, ready_workers)
-	algo.allocate_jobs_skills_no_split(steps_for_allocation, ready_workers)
+	algo.allocate_jobs(steps_for_allocation, ready_workers)
+	#algo.allocate_jobs_skills_no_split(steps_for_allocation, ready_workers)
 	#algo.allocate_jobs_steps_no_split(steps_for_allocation, ready_workers)
 	
 	utils.update_steps_status(tasks_array)
