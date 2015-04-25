@@ -9,18 +9,14 @@ import params
 from time import time
 
 
-#gen.generate_workers_db()
+gen.generate_workers_db()
+gen.generate_steps_db()
 
 workers_array = []
 input.init_workers_from_db("workers_db.txt", workers_array)
 
-#utils.print_all_workers(workers_array)
 ready_workers = utils.get_ready_workers(workers_array)
-#utils.print_all_workers(ready_workers)
-print len(ready_workers)
-print stats.total_available_work_time_per_day
 
-gen.generate_steps_db()
 gen.random_steps_from_db('steps_db.txt')
 
 
@@ -45,6 +41,8 @@ for i in range(0, params.max_num_of_iterations):
 		utils.print_statistics()
 	
 	ready_workers = utils.get_ready_workers(workers_array)
+		
+	
 	steps_for_allocation = utils.extract_steps_for_allocation(tasks_array)
 	
 	algo.allocate_jobs(steps_for_allocation, ready_workers)

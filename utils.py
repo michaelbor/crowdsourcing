@@ -75,6 +75,7 @@ def update_steps_status(tasks_array):
 					stats.completed_steps += 1
 					#stats.total_steps_in_system_time += step.in_system_time
 					unlock_next_steps(step, task.steps_array)
+					#stats.total_work_time += step.total_skills_time
 					task.steps_array.remove(step)
 					
 		if len(task.steps_array) == 0:
@@ -126,8 +127,17 @@ def print_statistics():
 	
 	if stats.total_available_work_time_per_day > 0:
 		print 'days passed: '+str(round(get_num_of_days_passed(),2))
-		print 'workers utilization: ' + \
-		str(round(stats.total_work_time/(stats.total_available_work_time_per_day*get_num_of_days_passed())/3600,8)*100)+'%'
+		#print 'workers utilization: ' + \
+		#str(round(stats.total_work_time/\
+		#(stats.total_available_work_time_per_day*(get_num_of_days_passed()+1))/3600,5)*100)+'%'
+		#print stats.new_total_work_time/3600
+		#print stats.total_available_work_time_per_day
+		print 'workers utilization 2: ' + \
+		str(round(stats.new_total_work_time/\
+		(stats.total_available_work_time_per_day*(get_num_of_days_passed()))/3600,5)*100)+'%'
+		print 'workering time per day: ' + \
+		str(round(stats.new_total_work_time/get_num_of_days_passed()))
+		print 'stats.total_available_work_time_per_day: '+str(stats.total_available_work_time_per_day)
 	
 	
 	print 'running time: '+str(round(time()-stats.t_start,3))+' sec'
@@ -145,6 +155,7 @@ def get_ready_workers(workers_array):
 	for worker in workers_array:
 		if worker.is_ready():
 			ret.extend([worker])
+			
 	
 	return ret
 

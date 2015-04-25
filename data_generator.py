@@ -40,8 +40,6 @@ def generate_workers_db():
 		id = i
 		num_of_skills = random.randint(1, params.max_num_of_skills_worker)
 		skills_seq = random.sample(range(1, params.num_of_existing_skills + 1), min(num_of_skills,params.num_of_existing_skills))
-		#avail_time = random.randint(params.avail_time_avg - params.avail_time_avg/2, \
-		#params.avail_time_avg + params.avail_time_avg/2)
 		[avail_time_start, avail_time_end] = random.sample(params.working_hours, 1)[0]
 		time_zone = random.sample(params.timezones,1)[0]
 		thefile.write("%d, " % id)
@@ -55,7 +53,7 @@ def generate_workers_db():
 	
 	
 		
-	
+'''	
 def random_steps_one_time():
 	
 	prev_time = 0
@@ -153,7 +151,7 @@ def random_steps():
 			
 	thefile.close()
 	
-	
+'''	
 	
 	
 def random_steps_from_db(steps_db_filename):
@@ -205,7 +203,7 @@ def random_steps_from_db(steps_db_filename):
 	
 
 
-
+'''
 def random_workers():
 		
 	thefile = open('input_workers1.txt', 'w')	
@@ -230,7 +228,7 @@ def random_workers():
 		thefile.write(", %s\n" % avail_time)
 	
 	thefile.close()
-	
+'''	
 
 def random_workers_from_db(workers_db_filename):
 		
