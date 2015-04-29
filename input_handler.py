@@ -4,19 +4,12 @@ from task_class import Task
 from worker_class import Worker
 import utils
 import stats
+import os
 
 def parse_skills_workers(skills_string):
 	k = skills_string.translate(None,'[]')
 	k = k.split(',')
 	k = map(int,k)
-	return k
-
-
-def parse_skills_steps(skills_string):
-	k = skills_string.translate(None,'[]')
-	k = k.split(',')
-	k = map(int,k)
-	k=[[k[2*i],k[2*i+1]] for i in range(len(k)/2)]
 	return k
 
 				
@@ -53,44 +46,36 @@ def init_steps_from_file(filename, tasks_array):
 	Initializing tasks dictionary that will hold all the tasks objects. 
 	These objects can be accessible by task_id.
 	'''
+	#if os.path.getsize(filename) > 0:
 	data = np.genfromtxt(filename, delimiter=', ', \
 	dtype=[('id','i8'), ('arr_time','f8'), ('task_id','i8'),\
- 	('skills','S5000'), ('task_prio','i8'), ('order','i8')])
-	tasks_dict = {}
+	 ('skills','S5000'), ('task_prio','i8'), ('order','i8')])
 	
-	#insert here to the dictionary the tasks from tasks_array !!!!!
-	for task in tasks_array:
-		tasks_dict[task.id] = task
-	
-	#clear the task_array
-	del tasks_array[:]
-	
-	for i in range(0,len(data)):
-		if tasks_dict.has_key(data[i]['task_id']) == False:
-			tasks_dict[data[i]['task_id']] = Task(data[i]['task_id'], data[i]['task_prio'])
-	
+	data_size = len(data)
+		
+	i = 0
+	while i < data_size:
+		new_task = Task(data[i]['task_id'], data[i]['task_prio'])
 		s = Step(data[i]['id'], data[i]['arr_time'], data[i]['task_id'], \
-		parse_skills_steps(data[i]['skills']), data[i]['task_prio'],data[i]['order'])
-		tasks_dict[data[i]['task_id']].add_step(s)
-		stats.total_steps_entered_system += 1
+		utils.parse_skills_steps(data[i]['skills']), data[i]['task_prio'],data[i]['order'])
+		s.isLocked = False
+		order_of_first = s.order
+		new_task.add_step(s) #adding the first step of the task
 		
-	'''
-	From now we don't need the dictionary, but only a list. Since we will need to sort tasks.
-	'''
-	for task in tasks_dict.values():
-		tasks_array.extend([task])
-		
-	for i in tasks_array:
-		i.sort_steps_ordering()
-		# now lets unlock first step of each task
-		order_of_first = i.steps_array[0].order
-		for step in i.steps_array:
-			if step.order == order_of_first:
+		i += 1
+		while i < data_size and data[i]['task_id'] == data[i-1]['task_id']:
+			s = Step(data[i]['id'], data[i]['arr_time'], data[i]['task_id'], \
+			parse_skills_steps(data[i]['skills']), data[i]['task_prio'],data[i]['order'])
+			if s.order == order_of_first:
 				step.isLocked = False
-			else:
-				break
-	
-	utils.sort_tasks(tasks_array)
+			
+			new_task.add_step(s)
+			i += 1
+			
+		tasks_array.extend([new_task])
+		
+		
+	tasks_array.sort(key=lambda x: x.task_prio,reverse=True)
 	
 
 def init_workers_from_db(filename, workers_array):

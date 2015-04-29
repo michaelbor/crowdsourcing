@@ -3,6 +3,9 @@ import random
 import params
 import stats
 import numpy as np
+from step_class import Step
+from task_class import Task
+import utils
 
 
 
@@ -152,6 +155,49 @@ def random_steps():
 	thefile.close()
 	
 '''	
+
+def load_steps_db_to_memory(steps_db_filename):
+	data = np.genfromtxt(steps_db_filename, delimiter=', ', \
+	dtype=[('id','i8'), ('skills','S5000'), ('order','i8')])
+	
+	return data
+
+
+def generate_and_load_steps_from_db(steps_db, tasks_array):
+
+	prev_time = stats.cur_time - params.time_step 
+	new_tasks_per_time_step = (params.num_of_new_tasks_per_hour * params.time_step) / 3600 
+	num_of_tasks = np.random.poisson(new_tasks_per_time_step)
+	
+	for i in range(0, num_of_tasks):
+		
+		task_id = stats.total_tasks_generated
+		stats.total_tasks_generated += 1
+		
+		task_prio = random.randint(1, params.max_prio)
+		
+		new_task = Task(task_id, task_prio)
+		
+		steps_in_task = random.randint(1,params.max_ordinal)
+		for j in range(0,steps_in_task):
+			
+			step_index = random.sample(np.where(steps_db['order'] == j+1)[0], 1)
+			arr_time = round(prev_time + random.random() * params.arr_time_avg_gap, 1)
+			prev_time = arr_time
+			s = Step(steps_db['id'][step_index][0], arr_time, task_id, \
+			utils.parse_skills_steps(steps_db['skills'][step_index][0]), task_prio, steps_db['order'][step_index][0])
+			if j == 0:
+				order_of_first = s.order
+			if 	s.order == order_of_first:
+				s.isLocked = False
+			
+			new_task.add_step(s)
+			
+		tasks_array.extend([new_task])
+		#utils.print_all_tasks([new_task])
+	
+
+
 	
 	
 def random_steps_from_db(steps_db_filename):
@@ -164,6 +210,9 @@ def random_steps_from_db(steps_db_filename):
 
 	new_tasks_per_time_step = (params.num_of_new_tasks_per_hour * params.time_step) / 3600 
 	num_of_tasks = max(2, np.random.poisson(new_tasks_per_time_step))
+	
+	if new_tasks_per_time_step < 2:
+		print 'Warning: new_tasks_per_time_step = '+str(new_tasks_per_time_step)+'. Using at least 2.'
 
 	thefile = open('input_steps_from_db.txt', 'w')	
 	thefile.write("#id, arr_time, task_id, skills, task_prio, order\n")
@@ -176,9 +225,6 @@ def random_steps_from_db(steps_db_filename):
 		
 		task_prio = random.randint(1, params.max_prio)
 		
-		# make params.steps_per_task random from 1 to k
-		#BUT, for steps_db generate ordinals from 1 to k
-		# reasonable k is 2,3,4,5
 		steps_in_task = random.randint(1,params.max_ordinal)
 		for j in range(0,steps_in_task):
 			

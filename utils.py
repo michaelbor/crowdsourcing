@@ -5,6 +5,14 @@ from time import time
 
 
 
+def parse_skills_steps(skills_string):
+	k = skills_string.translate(None,'[]')
+	k = k.split(',')
+	k = map(int,k)
+	k=[[k[2*i],k[2*i+1]] for i in range(int(len(k)/2))]
+	return k
+	
+
 def print_all_tasks(tasks_array):
 	print "printing all tasks:"
 	print "---------------------------------------------"
@@ -35,6 +43,7 @@ def print_steps(steps):
 		
 	print "---------------------------------------------\n"
 
+'''
 def extract_steps_for_allocation(tasks_array):
 	steps_for_allocation=[]
 	for task in tasks_array:
@@ -45,6 +54,29 @@ def extract_steps_for_allocation(tasks_array):
 				steps_for_allocation.extend([step])
 					
 	return steps_for_allocation
+'''	
+	
+def extract_steps_for_allocation_and_update_steps(tasks_array):
+	steps_for_allocation=[]
+	for task in tasks_array:
+		for step in task.steps_array:
+			if step.isLocked == True:
+				break
+			else:
+				step.timeToFinish = max(0, step.timeToFinish - params.time_step)
+				if step.isFullyScheduled == True and step.timeToFinish == 0:
+					step.isCompleted = True
+					stats.completed_steps += 1
+					unlock_next_steps(step, task.steps_array)
+					task.steps_array.remove(step)
+				elif step.isFullyScheduled == False and step.arr_time <= stats.cur_time:
+					steps_for_allocation.extend([step])
+	
+		if len(task.steps_array) == 0:
+			tasks_array.remove(task)
+					
+	return steps_for_allocation	
+	
 	
 	
 def unlock_next_steps(cur_step, steps_array):
@@ -56,13 +88,13 @@ def unlock_next_steps(cur_step, steps_array):
 		for i in range(idx+1, len(steps_array)):
 			if steps_array[i].order == order_of_first:
 				steps_array[i].isLocked = False
-				steps_array[i].waiting_time = stats.cur_time - steps_array[i].arr_time + params.time_step
+				steps_array[i].waiting_time = stats.cur_time - steps_array[i].arr_time
 			else:
 				break
 	
 
 
-	
+'''
 def update_steps_status(tasks_array):
 	for task in tasks_array:
 		for step in task.steps_array:
@@ -80,9 +112,9 @@ def update_steps_status(tasks_array):
 					
 		if len(task.steps_array) == 0:
 			tasks_array.remove(task)
+'''	
 	
-	
-	
+'''	
 def update_workers_status(workers_array):
 	for worker in workers_array:
 		stats.wasted_workers_time = stats.wasted_workers_time + \
@@ -90,16 +122,16 @@ def update_workers_status(workers_array):
 		worker.avail_time = max(0, worker.avail_time - params.time_step)
 		if worker.avail_time == 0:
 			workers_array.remove(worker)
+'''			
 			
-			
-	
+'''	
 def sort_tasks(tasks_array):
-	for task in tasks_array:
-		task.set_task_arr_time()
+	#for task in tasks_array:
+	#	task.set_task_arr_time()
 	
-	tasks_array.sort(key=lambda x: x.arr_time)
+	#tasks_array.sort(key=lambda x: x.steps_array[0].arr_time)
 	tasks_array.sort(key=lambda x: x.task_prio,reverse=True)
-	
+'''	
 
 def is_all_steps_fully_scheduled(tasks_array):
 
@@ -117,13 +149,15 @@ def get_num_of_days_passed():
 def print_statistics():
 	print '--------- statistics -----------------------------'
 	if stats.completed_steps > 0 and stats.total_work_time > 0 and stats.fully_scheduled_steps > 0:
-		print 'steps: total_steps_in_system_time/total_work_time = ' + \
-		str(round((stats.total_steps_in_system_time)/(stats.total_work_time),3))
-		print 'steps: total_waiting_time/total_steps_in_system_time = ' + \
-		str(round(stats.total_waiting_time/stats.total_steps_in_system_time,4))
+		#print 'steps: total_steps_in_system_time/total_work_time = ' + \
+		#str(round((stats.total_steps_in_system_time)/(stats.total_work_time),3))
+		#print 'steps: total_waiting_time/total_steps_in_system_time = ' + \
+		#str(round(stats.total_waiting_time/stats.total_steps_in_system_time,4))
 		print 'average waiting time: ' + \
 		str(round(stats.total_waiting_time/stats.fully_scheduled_steps,3)) + ' sec'
 		print 'backlogged steps: '+str(stats.total_steps_entered_system - stats.fully_scheduled_steps)
+		print 'backlogged steps avg: '+str(round(stats.total_backlog / stats.iter,2))
+	
 	
 	if stats.total_available_work_time_per_day > 0:
 		print 'days passed: '+str(round(get_num_of_days_passed(),2))
@@ -132,12 +166,12 @@ def print_statistics():
 		#(stats.total_available_work_time_per_day*(get_num_of_days_passed()+1))/3600,5)*100)+'%'
 		#print stats.new_total_work_time/3600
 		#print stats.total_available_work_time_per_day
-		print 'workers utilization 2: ' + \
+		print 'workers utilization: ' + \
 		str(round(stats.new_total_work_time/\
 		(stats.total_available_work_time_per_day*(get_num_of_days_passed()))/3600,5)*100)+'%'
-		print 'workering time per day: ' + \
+		#print 'workering time per day: ' + \
 		str(round(stats.new_total_work_time/get_num_of_days_passed()))
-		print 'stats.total_available_work_time_per_day: '+str(stats.total_available_work_time_per_day)
+		#print 'stats.total_available_work_time_per_day: '+str(stats.total_available_work_time_per_day)
 	
 	
 	print 'running time: '+str(round(time()-stats.t_start,3))+' sec'

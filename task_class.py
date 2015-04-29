@@ -1,4 +1,4 @@
-
+import stats
 
 class Task:
 	""" Class that represents any task """
@@ -24,12 +24,14 @@ class Task:
 		
 	def add_step(self, new_step):
 		self.steps_array.extend([new_step])
+		stats.total_steps_entered_system += 1
 		
-		
+	'''	
 	def sort_steps_ordering(self):
 		self.steps_array.sort(key=lambda x: x.arr_time)
 		self.steps_array.sort(key=lambda x: x.order)
-		
+	'''
+	'''	
 	def set_task_arr_time(self):
 		for i in self.steps_array:
 			if i.isFullyScheduled == False:
@@ -38,7 +40,7 @@ class Task:
 				
 		#print 'Info: all steps for task '+str(self.id)+' were completed'
 		self.arr_time = -1
-		
+	'''	
 		
 		 
         

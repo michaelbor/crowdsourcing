@@ -17,7 +17,8 @@ total_tasks_generated = 0
 total_available_work_time_per_day = 0
 
 new_total_work_time = 0
-
+total_backlog = 0
+iter = 0
 #tempCnt = 0
 
 	

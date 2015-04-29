@@ -7,23 +7,38 @@ import data_generator as gen
 import stats
 import params
 from time import time
+import sys
+import os.path
 
 
-gen.generate_workers_db()
-gen.generate_steps_db()
+#gen.generate_workers_db()
+#gen.generate_steps_db()
+
+if len(sys.argv) > 1:
+	params.num_of_new_tasks_per_hour = int(sys.argv[1])
+
+if len(sys.argv) > 2:
+	params.algo_type = int(sys.argv[2])
+
+algorithm = {\
+1:algo.allocate_jobs, \
+2:algo.allocate_jobs_skills_no_split, \
+3:algo.allocate_jobs_steps_no_split}
+
 
 workers_array = []
 input.init_workers_from_db("workers_db.txt", workers_array)
 
 ready_workers = utils.get_ready_workers(workers_array)
 
-gen.random_steps_from_db('steps_db.txt')
+#gen.random_steps_from_db('steps_db.txt')
 
+steps_db = gen.load_steps_db_to_memory('steps_db.txt')
 
 stats.cur_time += params.time_step 
 
 tasks_array = []
-input.init_steps_from_file('input_steps_from_db.txt', tasks_array)
+#input.init_steps_from_file('input_steps_from_db.txt', tasks_array)
 
 
 
@@ -31,34 +46,51 @@ stats.t_start = time() #measuring running time of the simulation
 
 
 
-for i in range(0, params.max_num_of_iterations):
+for stats.iter in range(0, params.max_num_of_iterations):
 	
-	if i % 100 == 0:
-		print '*** starting iteration '+str(i+1)+',  time: '+str(stats.cur_time)+\
+	if stats.iter % 100 == 0:
+		print '*** starting iteration '+str(stats.iter+1)+',  time: '+str(stats.cur_time)+\
 		'. [full sched: '+str(stats.fully_scheduled_steps)+\
 		', comp: '+str(stats.completed_steps)+\
 		', total: '+str(stats.total_steps_entered_system)+']'
 		utils.print_statistics()
-	
-	ready_workers = utils.get_ready_workers(workers_array)
 		
+	if utils.get_num_of_days_passed() > 300:
+		break
+		
+	#gen.random_steps_from_db('steps_db.txt')
+	#input.init_steps_from_file('input_steps_from_db.txt', tasks_array)	
+	gen.generate_and_load_steps_from_db(steps_db, tasks_array)
+	ready_workers = utils.get_ready_workers(workers_array)
+	steps_for_allocation = utils.extract_steps_for_allocation_and_update_steps(tasks_array)
 	
-	steps_for_allocation = utils.extract_steps_for_allocation(tasks_array)
+	algorithm[params.algo_type](steps_for_allocation, ready_workers)
 	
-	algo.allocate_jobs(steps_for_allocation, ready_workers)
-	#algo.allocate_jobs_skills_no_split(steps_for_allocation, ready_workers)
-	#algo.allocate_jobs_steps_no_split(steps_for_allocation, ready_workers)
-	
-	utils.update_steps_status(tasks_array)
-	
-	gen.random_steps_from_db('steps_db.txt')
-	input.init_steps_from_file('input_steps_from_db.txt', tasks_array)
-	
-	utils.sort_tasks(tasks_array) #needed since the arr_time of a task may change
-	
+	stats.total_backlog += (stats.total_steps_entered_system - stats.fully_scheduled_steps)
+	#utils.update_steps_status(tasks_array)
 	stats.cur_time += params.time_step
 
 stats.t_end = time()
 
+print '=== final statistics ==='
 utils.print_statistics()
 
+if os.path.isfile('results.txt') == False:
+	thefile = open('results.txt', 'a')
+	thefile.write("#algo load(tasks/h) wait_time      backlog utilization\n")
+else:
+	thefile = open('results.txt', 'a')
+
+#params.algo_type
+#params.num_of_new_tasks_per_hour
+#str(round(stats.total_waiting_time/stats.fully_scheduled_steps,3))
+#str(stats.total_steps_entered_system - stats.fully_scheduled_steps)
+#str(round(stats.new_total_work_time/(stats.total_available_work_time_per_day*(get_num_of_days_passed()))/3600,5)*100)
+thefile.write("%s %6s %19s %8s %11s\n" % (\
+params.algo_type,\
+params.num_of_new_tasks_per_hour,\
+round(stats.total_waiting_time/stats.fully_scheduled_steps,3),\
+stats.total_steps_entered_system - stats.fully_scheduled_steps,\
+round(stats.new_total_work_time/(stats.total_available_work_time_per_day*(utils.get_num_of_days_passed()))/3600,5)*100))
+
+thefile.close()
