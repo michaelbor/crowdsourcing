@@ -56,6 +56,8 @@ def allocate_jobs(steps_array, workers_array):
 			stats.total_steps_in_system_time += step.in_system_time
 			stats.total_work_time += step.total_skills_time
 			stats.total_waiting_time += step.waiting_time
+			if step.task_id == '524326fc2d7bef2278006801':
+				print 'task id: '+str(step.task_id)+' arr_time: '+str(step.arr_time)+' waiting time: '+str(step.waiting_time)+' ordinal: '+str(step.order) + ' cur_time: '+str(stats.cur_time)
 			
 
 		elif step.timeToFinish == 0: #this means that no new skill is scheduled, i.e., pure waiting

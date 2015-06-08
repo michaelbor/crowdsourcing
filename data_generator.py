@@ -168,7 +168,7 @@ def generate_and_load_steps_from_db(steps_db, tasks_array):
 	prev_time = stats.cur_time - params.time_step 
 	new_tasks_per_time_step = (params.num_of_new_tasks_per_hour * params.time_step) / 3600 
 	num_of_tasks = np.random.poisson(new_tasks_per_time_step)
-	
+
 	for i in range(0, num_of_tasks):
 		
 		task_id = stats.total_tasks_generated

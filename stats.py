@@ -19,8 +19,10 @@ total_available_work_time_per_day = 0
 new_total_work_time = 0
 total_backlog = 0
 iter = 0
-#tempCnt = 0
-
+#residual_count = 0
+data_files_rows_read = 1	
 	
-	
+steps_avg_duration_dict = {}
+last_task_id = -1
+last_loaded_step_time = 0
 	

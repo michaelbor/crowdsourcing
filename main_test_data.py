@@ -27,20 +27,38 @@ algorithm = {\
 
 
 workers_array = []
+tasks_array = []
+
 input.init_workers_from_db("workers_db.txt", workers_array)
 
 ready_workers = utils.get_ready_workers(workers_array)
 
-#gen.random_steps_from_db('steps_db.txt')
-
-steps_db = gen.load_steps_db_to_memory('steps_db.txt')
-
-stats.cur_time += params.time_step 
-
-tasks_array = []
-#input.init_steps_from_file('input_steps_from_db.txt', tasks_array)
+stats.cur_time = params.time_step
 
 
+
+input.load_steps_duration('avg_duration_result.txt')
+
+f = open('join_result_ordered.txt', 'r')
+
+
+
+f.readline()
+#f.readline()
+#stats.cur_time = 1372751532.0
+input.load_samasource_data(tasks_array, f)
+#stats.cur_time = 1372751533.0
+#print '========================================'
+#input.load_samasource_data(tasks_array, f)
+
+#while stats.data_files_rows_read < 10606938:
+#	stats.cur_time += 600
+#	input.load_samasource_data(tasks_array, f)
+
+#for x in stats.steps_avg_duration_dict:
+#	print (x, ':', stats.steps_avg_duration_dict[x])
+
+#sys.exit()
 
 stats.t_start = time() #measuring running time of the simulation
 
@@ -48,22 +66,25 @@ stats.t_start = time() #measuring running time of the simulation
 
 for stats.iter in range(0, params.max_num_of_iterations):
 	
-	if stats.iter % 100 == 0:
+	if stats.iter % 1000 == 0:
 		print '*** starting iteration '+str(stats.iter+1)+',  time: '+str(stats.cur_time)+\
 		'. [full sched: '+str(stats.fully_scheduled_steps)+\
 		', comp: '+str(stats.completed_steps)+\
 		', total: '+str(stats.total_steps_entered_system)+']'
 		utils.print_statistics()
 		
-	if utils.get_num_of_days_passed() > 5:# or (stats.total_backlog / (stats.iter+1)) > 500:
+	if utils.get_num_of_days_passed() > 500:# or (stats.total_backlog / (stats.iter+1)) > 500:
 		break
 		
 	#gen.random_steps_from_db('steps_db.txt')
 	#input.init_steps_from_file('input_steps_from_db.txt', tasks_array)	
-	gen.generate_and_load_steps_from_db(steps_db, tasks_array)
+	#gen.generate_and_load_steps_from_db(steps_db, tasks_array)
+	input.load_samasource_data(tasks_array, f)
 	ready_workers = utils.get_ready_workers(workers_array)
 	steps_for_allocation = utils.extract_steps_for_allocation_and_update_steps(tasks_array)
-	
+	#print len(steps_for_allocation)
+	#if(utils.get_num_of_days_passed() >= 86.81):
+	#	utils.print_all_tasks(tasks_array)
 	algorithm[params.algo_type](steps_for_allocation, ready_workers)
 	
 	stats.total_backlog += (stats.total_steps_entered_system - stats.fully_scheduled_steps)
@@ -71,6 +92,8 @@ for stats.iter in range(0, params.max_num_of_iterations):
 	stats.cur_time += params.time_step
 
 stats.t_end = time()
+
+f.close
 
 print '=== final statistics ==='
 utils.print_statistics()

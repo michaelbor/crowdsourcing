@@ -27,7 +27,8 @@ class Step:
 		+str(self.task_prio)+","+str(self.order)+","\
 		+str(self.total_skills_time)+","\
 		+str(self.in_system_time)\
-		+") sched: "+str(self.isFullyScheduled) + ", comp: "+str(self.isCompleted)
+		+") sched: "+str(self.isFullyScheduled) + ", comp: "+str(self.isCompleted)+\
+		", isLocked: "+str(self.isLocked)
         
     
 		

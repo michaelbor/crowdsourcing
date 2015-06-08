@@ -2,7 +2,7 @@ from __future__ import division
 import stats
 import params
 from time import time
-
+import sys
 
 
 def parse_skills_steps(skills_string):
@@ -14,12 +14,14 @@ def parse_skills_steps(skills_string):
 	
 
 def print_all_tasks(tasks_array):
+	count = 1
 	print "printing all tasks:"
 	print "---------------------------------------------"
 	for i in tasks_array:
-		print "task_id: "+str(i.id)
+		print str(count)+") task_id: "+str(i.id)
 		i.print_task_steps()
 		print ''
+		count += 1
 		
 	print "---------------------------------------------\n"
 
@@ -60,7 +62,7 @@ def extract_steps_for_allocation_and_update_steps(tasks_array):
 	steps_for_allocation=[]
 	for task in tasks_array:
 		for step in task.steps_array:
-			if step.isLocked == True:
+			if step.isLocked == True:				
 				break
 			else:
 				step.timeToFinish = max(0, step.timeToFinish - params.time_step)
@@ -68,13 +70,20 @@ def extract_steps_for_allocation_and_update_steps(tasks_array):
 					step.isCompleted = True
 					stats.completed_steps += 1
 					unlock_next_steps(step, task.steps_array)
-					task.steps_array.remove(step)
+					#task.steps_array.remove(step)
 				elif step.isFullyScheduled == False and step.arr_time <= stats.cur_time:
+					if step.waiting_time == 0:
+						step.waiting_time = stats.cur_time - step.arr_time
 					steps_for_allocation.extend([step])
+					if step.task_id == '524326fc2d7bef2278006801':
+						print 'task id: '+str(step.task_id)+' ordinal: '+str(step.order)+' ready for allocation at time: '+str(stats.cur_time)
+				
 	
-		if len(task.steps_array) == 0:
-			tasks_array.remove(task)
-					
+		#if len(task.steps_array) == 0:
+			#tasks_array.remove(task)
+		task.steps_array = [x for x in task.steps_array if x.isCompleted != True]
+	
+	tasks_array = [x for x in tasks_array if len(x.steps_array) > 0]	
 	return steps_for_allocation	
 	
 	
@@ -88,7 +97,9 @@ def unlock_next_steps(cur_step, steps_array):
 		for i in range(idx+1, len(steps_array)):
 			if steps_array[i].order == order_of_first:
 				steps_array[i].isLocked = False
-				steps_array[i].waiting_time = stats.cur_time - steps_array[i].arr_time
+				if steps_array[i].task_id == '524326fc2d7bef2278006801':
+					print 'task id: '+str(steps_array[i].task_id)+' ordinal: '+str(steps_array[i].order)+' UNLOCKED at time: '+str(stats.cur_time)
+
 			else:
 				break
 	
@@ -143,16 +154,12 @@ def is_all_steps_fully_scheduled(tasks_array):
 	
 		
 def get_num_of_days_passed():
-	return stats.cur_time/3600/24
+	return (stats.cur_time)/3600/24
 	
 	
 def print_statistics():
 	print '--------- statistics -----------------------------'
 	if stats.completed_steps > 0 and stats.total_work_time > 0 and stats.fully_scheduled_steps > 0:
-		#print 'steps: total_steps_in_system_time/total_work_time = ' + \
-		#str(round((stats.total_steps_in_system_time)/(stats.total_work_time),3))
-		#print 'steps: total_waiting_time/total_steps_in_system_time = ' + \
-		#str(round(stats.total_waiting_time/stats.total_steps_in_system_time,4))
 		print 'average waiting time: ' + \
 		str(round(stats.total_waiting_time/stats.fully_scheduled_steps,3)) + ' sec'
 		print 'backlogged steps: '+str(stats.total_steps_entered_system - stats.fully_scheduled_steps)
@@ -161,17 +168,10 @@ def print_statistics():
 	
 	if stats.total_available_work_time_per_day > 0:
 		print 'days passed: '+str(round(get_num_of_days_passed(),2))
-		#print 'workers utilization: ' + \
-		#str(round(stats.total_work_time/\
-		#(stats.total_available_work_time_per_day*(get_num_of_days_passed()+1))/3600,5)*100)+'%'
-		#print stats.new_total_work_time/3600
-		#print stats.total_available_work_time_per_day
 		print 'workers utilization: ' + \
 		str(round(stats.new_total_work_time/\
 		(stats.total_available_work_time_per_day*(get_num_of_days_passed()))/3600,5)*100)+'%'
-		#print 'workering time per day: ' + \
 		str(round(stats.new_total_work_time/get_num_of_days_passed()))
-		#print 'stats.total_available_work_time_per_day: '+str(stats.total_available_work_time_per_day)
 	
 	
 	print 'running time: '+str(round(time()-stats.t_start,3))+' sec'
@@ -192,5 +192,18 @@ def get_ready_workers(workers_array):
 			
 	
 	return ret
+
+
+'''
+def get_residual_waiting_time(tasks_array):
+	for task in tasks_array:
+		for step in task.steps_array:
+			if step.isFullyScheduled == False:
+				stats.residual_count += 1
+				if step.waiting_time > 0:
+					stats.total_work_time += step.waiting_time
+				else:
+					stats.total_work_time += (stats.cur_time - step.arr_time)
+'''
 
 	
