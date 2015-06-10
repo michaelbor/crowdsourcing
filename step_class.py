@@ -14,10 +14,11 @@ class Step:
 		self.task_prio = task_prio
 		self.order = order
 		self.isLocked = True
-		self.timeToFinish = 0
+		#self.timeToFinish = 0
 		self.in_system_time = 0
 		self.total_skills_time = sum([x[1] for x in skills])
 		self.waiting_time = 0
+		self.finish_time = 0
 		stats.total_skills_requirements_time += self.total_skills_time
 			
         

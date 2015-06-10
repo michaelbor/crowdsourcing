@@ -22,15 +22,6 @@ class Worker:
 	def get_avail_time_sec(self):
 		return 3600*(self.avail_time_end - self.ready_time)
 	
-
-	def is_ready11(self):
-		t = utils.get_local_time_in_hours(self.timezone)
-		if t >= self.ready_time and t < self.avail_time_end:
-			self.ready_time = t
-			return 1
-
-		self.ready_time = self.avail_time_start
-		return 0
 		
   	def is_ready(self):
 		t = utils.get_local_time_in_hours(self.timezone)

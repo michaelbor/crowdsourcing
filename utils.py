@@ -57,6 +57,25 @@ def extract_steps_for_allocation(tasks_array):
 					
 	return steps_for_allocation
 '''	
+
+def get_step_status(task, step):
+	if step.isLocked == True:
+		return 1
+	elif step.isCompleted == True:
+		return 2
+	else:
+		if step.isFullyScheduled == True and step.finish_time <= stats.cur_time: #step.timeToFinish == 0:
+			step.isCompleted = True
+			stats.completed_steps += 1
+			unlock_next_steps(step, task.steps_array)
+			return 2
+		elif step.isFullyScheduled == False and step.arr_time <= stats.cur_time:
+			if step.waiting_time == 0:
+				step.waiting_time = stats.cur_time - step.arr_time
+			return 0
+		
+
+
 	
 def extract_steps_for_allocation_and_update_steps(tasks_array):
 	steps_for_allocation=[]
@@ -64,26 +83,18 @@ def extract_steps_for_allocation_and_update_steps(tasks_array):
 		for step in task.steps_array:
 			if step.isLocked == True:				
 				break
+			elif step.isCompleted == True:
+				continue
 			else:
-				step.timeToFinish = max(0, step.timeToFinish - params.time_step)
-				if step.isFullyScheduled == True and step.timeToFinish == 0:
+				if step.isFullyScheduled == True and step.finish_time <= stats.cur_time: #step.timeToFinish == 0:
 					step.isCompleted = True
 					stats.completed_steps += 1
 					unlock_next_steps(step, task.steps_array)
-					#task.steps_array.remove(step)
 				elif step.isFullyScheduled == False and step.arr_time <= stats.cur_time:
 					if step.waiting_time == 0:
 						step.waiting_time = stats.cur_time - step.arr_time
 					steps_for_allocation.extend([step])
-					if step.task_id == '524326fc2d7bef2278006801':
-						print 'task id: '+str(step.task_id)+' ordinal: '+str(step.order)+' ready for allocation at time: '+str(stats.cur_time)
-				
-	
-		#if len(task.steps_array) == 0:
-			#tasks_array.remove(task)
-		task.steps_array = [x for x in task.steps_array if x.isCompleted != True]
-	
-	tasks_array = [x for x in tasks_array if len(x.steps_array) > 0]	
+						
 	return steps_for_allocation	
 	
 	
@@ -183,7 +194,7 @@ def get_local_time_in_hours(timezone):
 	return (stats.cur_time/3600 + timezone)%24
 
 
-
+'''
 def get_ready_workers(workers_array):
 	ret = []
 	for worker in workers_array:
@@ -192,7 +203,7 @@ def get_ready_workers(workers_array):
 			
 	
 	return ret
-
+'''
 
 '''
 def get_residual_waiting_time(tasks_array):

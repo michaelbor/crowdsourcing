@@ -23,6 +23,6 @@ iter = 0
 data_files_rows_read = 1	
 	
 steps_avg_duration_dict = {}
-last_task_id = -1
+#last_task_id = -1
 last_loaded_step_time = 0
 	

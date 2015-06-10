@@ -21,7 +21,7 @@ if len(sys.argv) > 2:
 	params.algo_type = int(sys.argv[2])
 
 algorithm = {\
-1:algo.allocate_jobs, \
+1:algo.allocate_jobs1, \
 2:algo.allocate_jobs_skills_no_split, \
 3:algo.allocate_jobs_steps_no_split}
 
@@ -31,7 +31,8 @@ tasks_array = []
 
 input.init_workers_from_db("workers_db.txt", workers_array)
 
-ready_workers = utils.get_ready_workers(workers_array)
+#ready_workers = utils.get_ready_workers(workers_array)
+ready_workers = [x for x in workers_array if x.is_ready() == True]
 
 stats.cur_time = params.time_step
 
@@ -63,32 +64,23 @@ input.load_samasource_data(tasks_array, f)
 stats.t_start = time() #measuring running time of the simulation
 
 
-
 for stats.iter in range(0, params.max_num_of_iterations):
 	
-	if stats.iter % 1000 == 0:
+	if stats.iter % 100 == 0:
 		print '*** starting iteration '+str(stats.iter+1)+',  time: '+str(stats.cur_time)+\
 		'. [full sched: '+str(stats.fully_scheduled_steps)+\
 		', comp: '+str(stats.completed_steps)+\
 		', total: '+str(stats.total_steps_entered_system)+']'
-		utils.print_statistics()
+		utils.print_statistics()			
 		
 	if utils.get_num_of_days_passed() > 500:# or (stats.total_backlog / (stats.iter+1)) > 500:
 		break
 		
-	#gen.random_steps_from_db('steps_db.txt')
-	#input.init_steps_from_file('input_steps_from_db.txt', tasks_array)	
-	#gen.generate_and_load_steps_from_db(steps_db, tasks_array)
 	input.load_samasource_data(tasks_array, f)
-	ready_workers = utils.get_ready_workers(workers_array)
-	steps_for_allocation = utils.extract_steps_for_allocation_and_update_steps(tasks_array)
-	#print len(steps_for_allocation)
-	#if(utils.get_num_of_days_passed() >= 86.81):
-	#	utils.print_all_tasks(tasks_array)
-	algorithm[params.algo_type](steps_for_allocation, ready_workers)
-	
+	ready_workers = [x for x in workers_array if x.is_ready() == True]
+	algorithm[params.algo_type](tasks_array, ready_workers)
+	tasks_array = [x for x in tasks_array if x.steps_array[-1].isCompleted == False]
 	stats.total_backlog += (stats.total_steps_entered_system - stats.fully_scheduled_steps)
-	#utils.update_steps_status(tasks_array)
 	stats.cur_time += params.time_step
 
 stats.t_end = time()

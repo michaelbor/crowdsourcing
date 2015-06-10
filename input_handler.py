@@ -124,11 +124,13 @@ def load_samasource_data(tasks_array, f):
 
 	last_pos = f.tell()
 	while 1:
-	#for line in f:
 		line = f.readline()
-		if (stats.total_steps_entered_system - stats.fully_scheduled_steps) > 50000:
+		if (stats.total_steps_entered_system - stats.fully_scheduled_steps) > 500000:
 			f.seek(last_pos)
 			return	
+			
+		if(stats.data_files_rows_read >= 10606938):
+			return
 			
 		if(len(line.split("|")) != 8):
 			continue
@@ -152,10 +154,11 @@ def load_samasource_data(tasks_array, f):
 		#+ ' '+str((stats.total_steps_entered_system - stats.fully_scheduled_steps))
 		#print str(arr_time) + ' task_id: '+ str(data['task_id'])+' '+str(stats.steps_avg_duration_dict[int(data['step_id'])])
 			
-		if stats.last_task_id != data['task_id']:
+		#if stats.last_task_id != data['task_id']:
+		if len(tasks_array) == 0 or tasks_array[-1].id != data['task_id']:
 			new_task = Task(data['task_id'], task_prio)
 			tasks_array.extend([new_task])
-			stats.last_task_id = data['task_id']
+			#stats.last_task_id = data['task_id']
 			
 			
 		s = Step(data['step_id'], \
@@ -171,7 +174,7 @@ def load_samasource_data(tasks_array, f):
 		#	print "******inserting step of task 524326f52d7bef2278005263, step order: "+str(s.order)
 		#	sys.exit()
 		if s.task_id == '524326fc2d7bef2278006801':
-						print 'task id: '+str(s.task_id)+' ordinal: '+str(s.order)+' entering the system at time: '+str(stats.cur_time)
+			print 'task id: '+str(s.task_id)+' ordinal: '+str(s.order)+' entering the system at time: '+str(stats.cur_time)
 
 		stats.data_files_rows_read += 1
 		last_pos = f.tell()
