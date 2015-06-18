@@ -8,12 +8,10 @@ class Task:
 		self.id = id
 		self.task_prio = task_prio
 		self.arr_time = 0
-		self.steps_list = None
+		#self.steps_list = None
 		self.steps_array = []
 	
 	def __del__(self):
-		#if (max(s.finish_time for s in self.steps_array) - self.arr_time) < 0:
-		#print str(max(s.finish_time for s in self.steps_array))+' - '+str(self.arr_time)
 		stats.total_tasks_turnaround_time += max(s.finish_time for s in self.steps_array) - self.arr_time
 		stats.total_finished_tasks += 1
         

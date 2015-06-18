@@ -68,10 +68,8 @@ for stats.iter in range(0, params.max_num_of_iterations):
 		
 	input.load_samasource_data(tasks_array, f)
 	ready_workers = [x for x in workers_array if x.is_ready() == True]
-	#print len(ready_workers)
 	algorithm[params.algo_type](tasks_array, ready_workers)
 	tasks_array = [x for x in tasks_array if False in (s.isCompleted for s in x.steps_array)]
-	#tasks_array = [x for x in tasks_array if x.steps_array[-1].isCompleted == False]
 	stats.total_backlog += (stats.total_steps_entered_system - stats.fully_scheduled_steps)
 	stats.cur_time += params.time_step
 
@@ -82,6 +80,7 @@ f.close
 print '=== final statistics ==='
 utils.print_statistics()
 
+'''
 if os.path.isfile('results.txt') == False:
 	thefile = open('results.txt', 'a')
 	thefile.write("#algo load(tasks/h) wait_time      backlog utilization  days_passed\n")
@@ -104,3 +103,4 @@ round(stats.new_total_work_time/(stats.total_available_work_time_per_day*(utils.
 round(utils.get_num_of_days_passed(),2)))
 
 thefile.close()
+'''

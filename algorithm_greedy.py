@@ -3,7 +3,7 @@ import utils
 import stats
 import params
 import random
-from multiprocessing import Process, Lock
+
 
 def update_avail_time(workers_array):
 	for worker in workers_array:
@@ -50,9 +50,6 @@ def allocate_jobs1(tasks_array, workers_array):
 							update_avail_time(temp_workers)	
 							step.finish_time = max(max(w.ready_time for w in temp_workers),step.finish_time)
 							skill[1] = 0 #skill is allocated, clear its required time
-							#print 'step finish time: '+str(step.finish_time)
-							#for w in temp_workers:
-							#	print w.print_worker()
 							break
 			
 				if required_time > 0: 			
@@ -60,18 +57,17 @@ def allocate_jobs1(tasks_array, workers_array):
 		
 			if is_step_fully_scheduled(step) == True:
 				step.isFullyScheduled = True
-				#print 'fully scheduled step '+str(step.id)+' of task '+str(task.id)
 				stats.fully_scheduled_steps += 1 
-				step.in_system_time = step.finish_time - step.arr_time 
-				stats.total_steps_in_system_time += step.in_system_time
+				#step.in_system_time = step.finish_time - step.arr_time 
+				#stats.total_steps_in_system_time += step.in_system_time
 				stats.total_work_time += step.total_skills_time
-				stats.total_waiting_time += step.waiting_time
+				#stats.total_waiting_time += step.waiting_time
 				if step.task_id == '524326fc2d7bef2278006801':
-					print 'task id: '+str(step.task_id)+' arr_time: '+str(step.arr_time)+' waiting time: '+str(step.waiting_time)+' ordinal: '+str(step.order) + ' cur_time: '+str(stats.cur_time)
+					print 'task id: '+str(step.task_id)+' arr_time: '+str(step.arr_time)+' ordinal: '+str(step.order) + ' cur_time: '+str(stats.cur_time)
 			
 
-			elif step.finish_time <= stats.cur_time: #this means that no new skill is scheduled, i.e., pure waiting
-				step.waiting_time += params.time_step
+			#elif step.finish_time <= stats.cur_time: #this means that no new skill is scheduled, i.e., pure waiting
+				#step.waiting_time += params.time_step
 							
 	return	
 	

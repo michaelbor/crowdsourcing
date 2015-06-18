@@ -73,8 +73,8 @@ def get_step_status(task, step):
 			return 2
 			
 		elif step.arr_time <= stats.cur_time:
-			if step.waiting_time == 0:
-				step.waiting_time = stats.cur_time - step.arr_time
+		#	if step.waiting_time == 0:
+		#		step.waiting_time = stats.cur_time - step.arr_time
 			return 0
 		
 
@@ -174,14 +174,21 @@ def get_num_of_days_passed():
 def print_statistics():
 	print '--------- statistics -----------------------------'
 	if stats.completed_steps > 0 and stats.total_work_time > 0 and stats.fully_scheduled_steps > 0:
-		print 'average waiting time: ' + \
-		str(round(stats.total_waiting_time/stats.fully_scheduled_steps,3)) + ' sec'
-		print 'backlogged steps: '+str(stats.total_steps_entered_system - stats.fully_scheduled_steps)
-		print 'backlogged steps avg: '+str(round(stats.total_backlog / stats.iter,2))
+		#print 'average waiting time: ' + \
+		#str(round(stats.total_waiting_time/stats.fully_scheduled_steps,3)) + ' sec'
+		#print 'backlogged steps: '+str(stats.total_steps_entered_system - stats.fully_scheduled_steps)
+		print 'avg backlogged steps: '+str(round(stats.total_backlog / stats.iter,2))
 	
 	if stats.total_finished_tasks > 0 and stats.total_tasks_turnaround_time > 0:
-		print 'average task turnaround time: ' + \
+		print 'avg task turnaround time: ' + \
 	 	str(round(stats.total_tasks_turnaround_time/stats.total_finished_tasks,2))+' sec   completed tasks: '+str(stats.total_finished_tasks)
+	
+	if stats.samasource_tasks_entered > 0 and stats.samasource_tasks_total_tunaround > 0:
+		print 'avg SAMASOURCE task turnaround time: ' + \
+	 	str(round(stats.samasource_tasks_total_tunaround/stats.samasource_tasks_entered,2))+\
+	 	' sec   evaluated tasks: '+str(stats.samasource_tasks_entered)+\
+	 	' with at most '+str(params.max_task_turnaround_days)+' days'
+	
 		
 	
 	if stats.total_available_work_time_per_day > 0:
@@ -204,6 +211,15 @@ def get_time_in_hours(timezone, t):
 	#we assume that the current time is according to timezone 0
 	return (t/3600 + timezone)%24
 
+
+def prepare_last_submission_at(str_from_file):
+		
+	ret = str_from_file.split('.')[0]
+	if ret == '' or ret == ' ':
+		print str_from_file
+			
+	return ret
+			
 '''
 def get_ready_workers(workers_array):
 	ret = []
