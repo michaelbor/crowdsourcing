@@ -64,12 +64,15 @@ def get_step_status(task, step):
 	elif step.isCompleted == True:
 		return 2
 	else:
-		if step.isFullyScheduled == True and step.finish_time <= stats.cur_time: #step.timeToFinish == 0:
-			step.isCompleted = True
-			stats.completed_steps += 1
-			unlock_next_steps(step, task.steps_array)
+		if step.isFullyScheduled == True:
+		 	if step.finish_time <= stats.cur_time: #step.timeToFinish == 0:
+				step.isCompleted = True
+				stats.completed_steps += 1
+				unlock_next_steps(step, task.steps_array)
+			
 			return 2
-		elif step.isFullyScheduled == False and step.arr_time <= stats.cur_time:
+			
+		elif step.arr_time <= stats.cur_time:
 			if step.waiting_time == 0:
 				step.waiting_time = stats.cur_time - step.arr_time
 			return 0
@@ -176,6 +179,10 @@ def print_statistics():
 		print 'backlogged steps: '+str(stats.total_steps_entered_system - stats.fully_scheduled_steps)
 		print 'backlogged steps avg: '+str(round(stats.total_backlog / stats.iter,2))
 	
+	if stats.total_finished_tasks > 0 and stats.total_tasks_turnaround_time > 0:
+		print 'average task turnaround time: ' + \
+	 	str(round(stats.total_tasks_turnaround_time/stats.total_finished_tasks,2))+' sec   completed tasks: '+str(stats.total_finished_tasks)
+		
 	
 	if stats.total_available_work_time_per_day > 0:
 		print 'days passed: '+str(round(get_num_of_days_passed(),2))
@@ -193,6 +200,9 @@ def get_local_time_in_hours(timezone):
 	#we assume that the current time is according to timezone 0
 	return (stats.cur_time/3600 + timezone)%24
 
+def get_time_in_hours(timezone, t):
+	#we assume that the current time is according to timezone 0
+	return (t/3600 + timezone)%24
 
 '''
 def get_ready_workers(workers_array):

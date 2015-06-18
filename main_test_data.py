@@ -9,7 +9,7 @@ import params
 from time import time
 import sys
 import os.path
-
+from multiprocessing import Process, Lock
 
 #gen.generate_workers_db()
 #gen.generate_steps_db()
@@ -21,6 +21,7 @@ if len(sys.argv) > 2:
 	params.algo_type = int(sys.argv[2])
 
 algorithm = {\
+#1:algo.allocate_jobs1, \
 1:algo.allocate_jobs1, \
 2:algo.allocate_jobs_skills_no_split, \
 3:algo.allocate_jobs_steps_no_split}
@@ -31,11 +32,13 @@ tasks_array = []
 
 input.init_workers_from_db("workers_db.txt", workers_array)
 
-#ready_workers = utils.get_ready_workers(workers_array)
-ready_workers = [x for x in workers_array if x.is_ready() == True]
+w = len(workers_array)
+print w
+for i in range(0,w):
+	stats.mutex.extend([Lock()])
+
 
 stats.cur_time = params.time_step
-
 
 
 input.load_steps_duration('avg_duration_result.txt')
@@ -45,27 +48,14 @@ f = open('join_result_ordered.txt', 'r')
 
 
 f.readline()
-#f.readline()
-#stats.cur_time = 1372751532.0
 input.load_samasource_data(tasks_array, f)
-#stats.cur_time = 1372751533.0
-#print '========================================'
-#input.load_samasource_data(tasks_array, f)
 
-#while stats.data_files_rows_read < 10606938:
-#	stats.cur_time += 600
-#	input.load_samasource_data(tasks_array, f)
-
-#for x in stats.steps_avg_duration_dict:
-#	print (x, ':', stats.steps_avg_duration_dict[x])
-
-#sys.exit()
 
 stats.t_start = time() #measuring running time of the simulation
 
 
 for stats.iter in range(0, params.max_num_of_iterations):
-	
+			
 	if stats.iter % 100 == 0:
 		print '*** starting iteration '+str(stats.iter+1)+',  time: '+str(stats.cur_time)+\
 		'. [full sched: '+str(stats.fully_scheduled_steps)+\
@@ -78,8 +68,10 @@ for stats.iter in range(0, params.max_num_of_iterations):
 		
 	input.load_samasource_data(tasks_array, f)
 	ready_workers = [x for x in workers_array if x.is_ready() == True]
+	#print len(ready_workers)
 	algorithm[params.algo_type](tasks_array, ready_workers)
-	tasks_array = [x for x in tasks_array if x.steps_array[-1].isCompleted == False]
+	tasks_array = [x for x in tasks_array if False in (s.isCompleted for s in x.steps_array)]
+	#tasks_array = [x for x in tasks_array if x.steps_array[-1].isCompleted == False]
 	stats.total_backlog += (stats.total_steps_entered_system - stats.fully_scheduled_steps)
 	stats.cur_time += params.time_step
 

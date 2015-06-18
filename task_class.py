@@ -10,7 +10,13 @@ class Task:
 		self.arr_time = 0
 		self.steps_list = None
 		self.steps_array = []
-				
+	
+	def __del__(self):
+		#if (max(s.finish_time for s in self.steps_array) - self.arr_time) < 0:
+		#print str(max(s.finish_time for s in self.steps_array))+' - '+str(self.arr_time)
+		stats.total_tasks_turnaround_time += max(s.finish_time for s in self.steps_array) - self.arr_time
+		stats.total_finished_tasks += 1
+        
         
 	def print_task(self):
 		return "(" + str(self.id) + "," + str(self.arr_time) + ","\
@@ -24,6 +30,8 @@ class Task:
 		
 	def add_step(self, new_step):
 		self.steps_array.extend([new_step])
+		if self.arr_time == 0:
+			self.arr_time = new_step.arr_time
 		stats.total_steps_entered_system += 1
 		
 	'''	

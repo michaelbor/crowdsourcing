@@ -2,10 +2,12 @@ from __future__ import division
 import utils
 import stats
 import params
+import random
+from multiprocessing import Process, Lock
 
 def update_avail_time(workers_array):
 	for worker in workers_array:
-		worker.ready_time += worker.used_time/3600
+		worker.ready_time += worker.used_time
 		stats.new_total_work_time += worker.used_time
 		worker.used_time = 0
 		
@@ -23,6 +25,9 @@ def is_step_fully_scheduled(step):
 	return True
 
 
+
+
+
 def allocate_jobs1(tasks_array, workers_array):
 	for task in tasks_array:
 		for step in task.steps_array:
@@ -34,6 +39,7 @@ def allocate_jobs1(tasks_array, workers_array):
 			for skill in step.skills:
 				required_time = skill[1]
 				temp_workers = []
+				random.shuffle(workers_array)
 				for worker in workers_array:
 					if skill[0] in worker.skills and skill[1] > 0:
 						worker.used_time = min(worker.get_avail_time_sec(), required_time)
@@ -41,9 +47,12 @@ def allocate_jobs1(tasks_array, workers_array):
 						temp_workers.extend([worker])
 			
 						if required_time == 0:	
-							step.finish_time = max(max(w.ready_time for w in temp_workers),step.finish_time)
 							update_avail_time(temp_workers)	
+							step.finish_time = max(max(w.ready_time for w in temp_workers),step.finish_time)
 							skill[1] = 0 #skill is allocated, clear its required time
+							#print 'step finish time: '+str(step.finish_time)
+							#for w in temp_workers:
+							#	print w.print_worker()
 							break
 			
 				if required_time > 0: 			
@@ -51,6 +60,7 @@ def allocate_jobs1(tasks_array, workers_array):
 		
 			if is_step_fully_scheduled(step) == True:
 				step.isFullyScheduled = True
+				#print 'fully scheduled step '+str(step.id)+' of task '+str(task.id)
 				stats.fully_scheduled_steps += 1 
 				step.in_system_time = step.finish_time - step.arr_time 
 				stats.total_steps_in_system_time += step.in_system_time
