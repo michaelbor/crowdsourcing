@@ -18,9 +18,31 @@ class Worker:
 		stats.total_available_work_time_per_day += (avail_time_end - avail_time_start)
 		
 	
+
 	
+#	def get_avail_time_sec(self):
+#		return 3600*(self.avail_time_end - self.ready_time)
+#	
+
+		
+#  	def is_ready(self):
+#		t = utils.get_local_time_in_hours(self.timezone)
+#		if t >= self.avail_time_start and t < self.avail_time_end:
+#			if ((t - self.avail_time_start)*3600 < params.time_step-0.00001) or t >= self.ready_time:
+#				#first time in shift or inside the shift but past the ready_time
+#				#in both cases we just ignore the ready_time and set it to the current t
+#				self.ready_time = t
+#				return 1
+#			else:
+#				return 0
+#
+#		return 0
+
+
+
 	def get_avail_time_sec(self):
-		return 3600*(self.avail_time_end - utils.get_time_in_hours(self.timezone, self.ready_time))
+		kk = 3600*(self.avail_time_end - utils.get_time_in_hours(self.timezone, self.ready_time))
+		return kk#3600*(self.avail_time_end - self.ready_time)
 	
 		
   	def is_ready(self):
@@ -37,6 +59,27 @@ class Worker:
 
 		#self.ready_time = self.avail_time_start
 		return 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 				
       
 	def print_worker(self):
@@ -45,8 +88,7 @@ class Worker:
 		+str(self.avail_time_end)+","\
 		+str(self.timezone)+","\
 		+str(self.is_ready())+","\
-		+str(utils.get_local_time_in_hours(self.timezone))+","\
-		+str(self.ready_time)+")"
+		+str(utils.get_local_time_in_hours(self.timezone))+")"
         
 
 		

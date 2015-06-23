@@ -16,11 +16,6 @@ cur_time = 0 #in seconds
 total_tasks_generated = 0
 total_available_work_time_per_day = 0
 
-total_finished_tasks = 0
-total_tasks_turnaround_time = 0
-samasource_tasks_entered = 0
-samasource_tasks_total_tunaround = 0
-
 new_total_work_time = 0
 total_backlog = 0
 iter = 0
@@ -30,3 +25,4 @@ data_files_rows_read = 1
 steps_avg_duration_dict = {}
 #last_task_id = -1
 last_loaded_step_time = 0
+	

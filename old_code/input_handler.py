@@ -150,24 +150,15 @@ def load_samasource_data(tasks_array, f):
 			f.seek(last_pos)
 			return
 			
-		
+		#print str(arr_time) + ' task_id: '+ str(data['task_id'])+' '+str(data['step_id'])+' '+str(data['duration']) \
+		#+ ' '+str((stats.total_steps_entered_system - stats.fully_scheduled_steps))
+		#print str(arr_time) + ' task_id: '+ str(data['task_id'])+' '+str(stats.steps_avg_duration_dict[int(data['step_id'])])
+			
+		#if stats.last_task_id != data['task_id']:
 		if len(tasks_array) == 0 or tasks_array[-1].id != data['task_id']:
 			new_task = Task(data['task_id'], task_prio)
 			tasks_array.extend([new_task])
-			last_submission_string = utils.prepare_last_submission_at(str(data['last_submission_at']))
-			
-			
-			#print '**********!!!!**** '+str(data['last_submission_at']) 
-			
-			if str(data['last_submission_at']).strip() != '':
-				last_submission = time.mktime(time.strptime(last_submission_string, '%Y-%m-%d %H:%M:%S')) \
-					- params.first_step_time
-				
-				turnaround_time = last_submission - arr_time
-			
-				if turnaround_time < (params.max_task_turnaround_days * 24 * 3600):
-					stats.samasource_tasks_entered += 1
-					stats.samasource_tasks_total_tunaround += turnaround_time
+			#stats.last_task_id = data['task_id']
 			
 			
 		s = Step(data['step_id'], \
