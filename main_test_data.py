@@ -9,7 +9,6 @@ import params
 from time import time
 import sys
 import os.path
-from multiprocessing import Process, Lock
 
 #gen.generate_workers_db()
 #gen.generate_steps_db()
@@ -30,20 +29,16 @@ algorithm = {\
 workers_array = []
 tasks_array = []
 
-input.init_workers_from_db("workers_db.txt", workers_array)
+input.init_workers_from_db("../data/workers_db.txt", workers_array)
 
-w = len(workers_array)
-print w
-for i in range(0,w):
-	stats.mutex.extend([Lock()])
 
 
 stats.cur_time = params.time_step
 
 
-input.load_steps_duration('avg_duration_result.txt')
+input.load_steps_duration('../data/avg_duration_result.txt')
 
-f = open('join_result_ordered.txt', 'r')
+f = open('../data/join_result_ordered.txt', 'r')
 
 
 
