@@ -28,12 +28,20 @@ parser.add_option("--avg_steps_duration", dest="avg_steps_duration_file", defaul
 
 parser.add_option("--tasks", dest="tasks_input_file", default = "../data/join_result_ordered.txt",
                   help="file that contains list of steps/tasks to schedule", metavar="FILE")
-                  
+       
+parser.add_option("--buf", dest="buf",type="int", default = 20000,
+                  help="Buffer size - limits burst size - max number of tasks can be stored in the tasks_array", metavar="BUF_SIZE")                  
+
+parser.add_option("--time_step", dest="time_step",type="int", default = 600,
+                  help="Time step - time between consequitive schedulings", metavar="TIME_STEP")                  
+
 
 (options, args) = parser.parse_args()
 
 params.num_of_new_tasks_per_hour = options.num_of_new_tasks_per_hour
 params.algo_type = options.algo_type
+params.buf = options.buf
+params.time_step = options.time_step
 
 
 #gen.generate_workers_db()
