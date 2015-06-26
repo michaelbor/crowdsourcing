@@ -114,22 +114,23 @@ def get_gen(line):
     yield line
             		
 def load_samasource_data(tasks_array, f):
-	#print 'loading samasource data...'
 
-	if(stats.data_files_rows_read >= 10606938 or \
-		stats.last_loaded_step_time > stats.cur_time):
+	if	stats.last_loaded_step_time > stats.cur_time:
 		return
 	
+	
 	task_prio = 1
-
 	last_pos = f.tell()
+	
 	while 1:
 		line = f.readline()
-		if (stats.total_steps_entered_system - stats.fully_scheduled_steps) > 200000:
+		if (stats.total_steps_entered_system - stats.fully_scheduled_steps) > params.buf:
 			f.seek(last_pos)
 			return	
 			
-		if(stats.data_files_rows_read >= 10606938):
+		
+		if line == '':
+			stats.steps_file_ended = 1
 			return
 			
 		if(len(line.split("|")) != 8):
@@ -140,7 +141,9 @@ def load_samasource_data(tasks_array, f):
 		('ordinal','i8'),('duration_gold','f8'),('duration','f8'),\
 		('last_submission_at','S50'),('answered_at','S50')])
 			
-		#print '***************** '+str(len(line.split("|")))
+		
+		if stats.total_steps_entered_system == 0:
+			params.first_step_time = time.mktime(time.strptime(str(data['created_at']), '%Y-%m-%d %H:%M:%S'))
 				
 		arr_time = time.mktime(time.strptime(str(data['created_at']), '%Y-%m-%d %H:%M:%S')) \
 					- params.first_step_time
@@ -154,20 +157,24 @@ def load_samasource_data(tasks_array, f):
 		if len(tasks_array) == 0 or tasks_array[-1].id != data['task_id']:
 			new_task = Task(data['task_id'], task_prio)
 			tasks_array.extend([new_task])
-			last_submission_string = utils.prepare_last_submission_at(str(data['last_submission_at']))
+			last_submission_string = utils.prepare_submission_at(str(data['last_submission_at']))
 			
-			
-			#print '**********!!!!**** '+str(data['last_submission_at']) 
-			
+						
 			if str(data['last_submission_at']).strip() != '':
+				first_submission_string = utils.prepare_submission_at(str(data['answered_at']))
 				last_submission = time.mktime(time.strptime(last_submission_string, '%Y-%m-%d %H:%M:%S')) \
 					- params.first_step_time
+					
+				first_submission = time.mktime(time.strptime(first_submission_string, '%Y-%m-%d %H:%M:%S')) \
+					- params.first_step_time
 				
-				turnaround_time = last_submission - arr_time
+				duration_of_first_step = float(data['duration'])
+				turnaround_time = last_submission - (first_submission - duration_of_first_step)
 			
 				if turnaround_time < (params.max_task_turnaround_days * 24 * 3600):
 					stats.samasource_tasks_entered += 1
 					stats.samasource_tasks_total_tunaround += turnaround_time
+					#print '****** '+str(data['task_id'])+'   '+str(stats.samasource_tasks_entered)
 			
 			
 		s = Step(data['step_id'], \
@@ -182,8 +189,9 @@ def load_samasource_data(tasks_array, f):
 		#if(data['task_id'] == '524326f52d7bef2278005263' and s.order == 1):
 		#	print "******inserting step of task 524326f52d7bef2278005263, step order: "+str(s.order)
 		#	sys.exit()
-		if s.task_id == '524326fc2d7bef2278006801':
-			print 'task id: '+str(s.task_id)+' ordinal: '+str(s.order)+' entering the system at time: '+str(stats.cur_time)
+		
+		#if s.task_id == '524326fc2d7bef2278006801':
+		#	print 'task id: '+str(s.task_id)+' ordinal: '+str(s.order)+' entering the system at time: '+str(stats.cur_time)
 
 		stats.data_files_rows_read += 1
 		last_pos = f.tell()

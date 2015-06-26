@@ -8,13 +8,13 @@ class Task:
 		self.id = id
 		self.task_prio = task_prio
 		self.arr_time = 0
-		#self.steps_list = None
 		self.steps_array = []
+		
 	
-	def __del__(self):
-		stats.total_tasks_turnaround_time += max(s.finish_time for s in self.steps_array) - self.arr_time
-		stats.total_finished_tasks += 1
-        
+	#def __del__(self):
+	#	stats.total_tasks_turnaround_time += max(s.finish_time for s in self.steps_array) - self.arr_time
+	#	stats.total_finished_tasks += 1
+	#	print self.id
         
 	def print_task(self):
 		return "(" + str(self.id) + "," + str(self.arr_time) + ","\
@@ -31,6 +31,14 @@ class Task:
 		if self.arr_time == 0:
 			self.arr_time = new_step.arr_time
 		stats.total_steps_entered_system += 1
+		
+	def is_completed(self):
+		if False in (s.isCompleted for s in self.steps_array):
+			return False
+		else:
+			stats.total_tasks_turnaround_time += max(s.finish_time for s in self.steps_array) - self.arr_time
+			stats.total_finished_tasks += 1
+			return True
 		
 	'''	
 	def sort_steps_ordering(self):

@@ -112,8 +112,8 @@ def unlock_next_steps(cur_step, steps_array):
 		for i in range(idx+1, len(steps_array)):
 			if steps_array[i].order == order_of_first:
 				steps_array[i].isLocked = False
-				if steps_array[i].task_id == '524326fc2d7bef2278006801':
-					print 'task id: '+str(steps_array[i].task_id)+' ordinal: '+str(steps_array[i].order)+' UNLOCKED at time: '+str(stats.cur_time)
+				#if steps_array[i].task_id == '524326fc2d7bef2278006801':
+				#	print 'task id: '+str(steps_array[i].task_id)+' ordinal: '+str(steps_array[i].order)+' UNLOCKED at time: '+str(stats.cur_time)
 
 			else:
 				break
@@ -213,11 +213,11 @@ def get_time_in_hours(timezone, t):
 	return (t/3600 + timezone)%24
 
 
-def prepare_last_submission_at(str_from_file):
+def prepare_submission_at(str_from_file):
 		
 	ret = str_from_file.split('.')[0]
-	if ret == '' or ret == ' ':
-		print str_from_file
+	#if ret == '' or ret == ' ':
+	#	print 'EMPTY str_from_file ENTRY!!!'
 			
 	return ret
 			
