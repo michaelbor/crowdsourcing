@@ -77,8 +77,8 @@ for stats.iter in range(0, params.max_num_of_iterations):
 		', total: '+str(stats.total_steps_entered_system)+']'
 		utils.print_statistics()			
 		
-	if utils.get_num_of_days_passed() > 500:# or (stats.total_backlog / (stats.iter+1)) > 500:
-		break
+	#if utils.get_num_of_days_passed() > 500:# or (stats.total_backlog / (stats.iter+1)) > 500:
+	#	break
 		
 	if stats.steps_file_ended == 1 and not tasks_array:
 		break
@@ -86,7 +86,7 @@ for stats.iter in range(0, params.max_num_of_iterations):
 	input.load_samasource_data(tasks_array, f)
 	ready_workers = [x for x in workers_array if x.is_ready() == True]
 	algorithm[params.algo_type](tasks_array, ready_workers)
-	tasks_array = [x for x in tasks_array if not x.is_completed()]
+	tasks_array = [x for x in tasks_array if not x.is_fully_scheduled()]
 	stats.total_backlog += (stats.total_steps_entered_system - stats.fully_scheduled_steps)
 	stats.cur_time += params.time_step
 
@@ -104,12 +104,12 @@ utils.print_statistics()
 
 if os.path.isfile('y_res.txt') == False:
 	thefile = open('y_res.txt', 'a')
-	thefile.write("algo,load(tasks/h),tasks_file,TAT,num_of_tasks,S_TAT,S_num_of_tasks,backlog_avg,utilization,days_passed\n")
+	thefile.write("#algo,load(tasks/h),tasks_file,TAT,num_of_tasks,S_TAT,S_num_of_tasks,S_max_days,backlog_avg,utilization,days_passed,runtime,time_step,buf\n")
 else:
 	thefile = open('y_res.txt', 'a')
 
 
-thefile.write("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n" % (\
+thefile.write("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n" % (\
 params.algo_type,\
 params.num_of_new_tasks_per_hour,\
 options.tasks_input_file,\
@@ -117,9 +117,13 @@ round(stats.total_tasks_turnaround_time/stats.total_finished_tasks,2),\
 stats.total_finished_tasks,\
 round(stats.samasource_tasks_total_tunaround/stats.samasource_tasks_entered,2),\
 stats.samasource_tasks_entered,\
+params.max_task_turnaround_days,\
 round(stats.total_backlog / stats.iter,2),\
 round(stats.new_total_work_time/(stats.total_available_work_time_per_day*(utils.get_num_of_days_passed()))/3600,5)*100,\
-round(utils.get_num_of_days_passed(),2)))
+round(utils.get_num_of_days_passed(),2),\
+round(time()-stats.t_start,3),\
+params.time_step,\
+params.buf))
 
 thefile.close()
 

@@ -143,10 +143,10 @@ def load_samasource_data(tasks_array, f):
 			
 		
 		if stats.total_steps_entered_system == 0:
-			params.first_step_time = time.mktime(time.strptime(str(data['created_at']), '%Y-%m-%d %H:%M:%S'))
+			stats.first_step_time = time.mktime(time.strptime(str(data['created_at']), '%Y-%m-%d %H:%M:%S'))
 				
 		arr_time = time.mktime(time.strptime(str(data['created_at']), '%Y-%m-%d %H:%M:%S')) \
-					- params.first_step_time
+					- stats.first_step_time
 					
 		if(arr_time > stats.cur_time):
 			stats.last_loaded_step_time = arr_time
@@ -163,10 +163,10 @@ def load_samasource_data(tasks_array, f):
 			if str(data['last_submission_at']).strip() != '':
 				first_submission_string = utils.prepare_submission_at(str(data['answered_at']))
 				last_submission = time.mktime(time.strptime(last_submission_string, '%Y-%m-%d %H:%M:%S')) \
-					- params.first_step_time
+					- stats.first_step_time
 					
 				first_submission = time.mktime(time.strptime(first_submission_string, '%Y-%m-%d %H:%M:%S')) \
-					- params.first_step_time
+					- stats.first_step_time
 				
 				duration_of_first_step = float(data['duration'])
 				turnaround_time = last_submission - (first_submission - duration_of_first_step)
@@ -193,7 +193,7 @@ def load_samasource_data(tasks_array, f):
 		#if s.task_id == '524326fc2d7bef2278006801':
 		#	print 'task id: '+str(s.task_id)+' ordinal: '+str(s.order)+' entering the system at time: '+str(stats.cur_time)
 
-		stats.data_files_rows_read += 1
+		#stats.data_files_rows_read += 1
 		last_pos = f.tell()
 	
 		

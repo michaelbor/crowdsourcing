@@ -25,6 +25,6 @@ max_ordinal = 3
 num_of_new_tasks_per_hour = 100
 algo_type = 1
 #first_step_time = 1372751532.0
-first_step_time = 1872751532.0
+#first_step_time = 1872751532.0
 max_task_turnaround_days = 365
 buf = 200000
