@@ -39,10 +39,6 @@ def allocate_jobs1(tasks_array, workers_array):
 				required_time = skill[1]
 				temp_workers = []
 				random.shuffle(workers_array)
-				#first_worker_index = random.randint(0,len(workers_array)-1)
-				#worker_index = first_worker_index
-				#while 1:
-				#	worker = workers_array[worker_index]
 				for worker in workers_array:
 					if skill[0] in worker.skills and skill[1] > 0:
 						worker.used_time = min(worker.get_avail_time_sec(), required_time)
@@ -54,11 +50,7 @@ def allocate_jobs1(tasks_array, workers_array):
 							step.finish_time = max(max(w.ready_time for w in temp_workers),step.finish_time)
 							skill[1] = 0 #skill is allocated, clear its required time
 							break
-							
-					#worker_index += 1
-					#worker_index = worker_index % len(workers_array)
-					#if worker_index == first_worker_index:
-					#	break
+	
 			
 				if required_time > 0: 			
 					reset_used_time(temp_workers) #skill can't be allocated now.
