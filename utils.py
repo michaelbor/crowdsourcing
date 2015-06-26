@@ -69,7 +69,7 @@ def get_step_status(task, step):
 		
 
 
-	
+'''	
 def extract_steps_for_allocation_and_update_steps(tasks_array):
 	steps_for_allocation=[]
 	for task in tasks_array:
@@ -89,7 +89,7 @@ def extract_steps_for_allocation_and_update_steps(tasks_array):
 					steps_for_allocation.extend([step])
 						
 	return steps_for_allocation	
-	
+'''	
 	
 	
 def unlock_next_steps(cur_step, steps_array):
@@ -101,9 +101,7 @@ def unlock_next_steps(cur_step, steps_array):
 		for i in range(idx+1, len(steps_array)):
 			if steps_array[i].order == order_of_first:
 				steps_array[i].isLocked = False
-				#if steps_array[i].task_id == '524326fc2d7bef2278006801':
-				#	print 'task id: '+str(steps_array[i].task_id)+' ordinal: '+str(steps_array[i].order)+' UNLOCKED at time: '+str(stats.cur_time)
-
+				
 			else:
 				break
 	

@@ -29,7 +29,7 @@ parser.add_option("--avg_steps_duration", dest="avg_steps_duration_file", defaul
 parser.add_option("--tasks", dest="tasks_input_file", default = "../data/join_result_ordered.txt",
                   help="file that contains list of steps/tasks to schedule", metavar="FILE")
        
-parser.add_option("--buf", dest="buf",type="int", default = 20000,
+parser.add_option("--buf", dest="buf",type="int", default = 200000,
                   help="Buffer size - limits burst size - max number of tasks can be stored in the tasks_array", metavar="BUF_SIZE")                  
 
 parser.add_option("--time_step", dest="time_step",type="int", default = 600,
@@ -94,7 +94,7 @@ for stats.iter in range(0, params.max_num_of_iterations):
 	input.load_samasource_data(tasks_array, f)
 	ready_workers = [x for x in workers_array if x.is_ready() == True]
 	algorithm[params.algo_type](tasks_array, ready_workers)
-	tasks_array = [x for x in tasks_array if not x.is_fully_scheduled()]
+	tasks_array = [x for x in tasks_array if not x.is_completed()]
 	stats.total_backlog += (stats.total_steps_entered_system - stats.fully_scheduled_steps)
 	stats.cur_time += params.time_step
 

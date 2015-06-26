@@ -40,13 +40,7 @@ class Task:
 			stats.total_finished_tasks += 1
 			return True
 			
-	def is_fully_scheduled(self):
-		if False in (s.isFullyScheduled for s in self.steps_array):
-			return False
-		else:
-			stats.total_tasks_turnaround_time += max(s.finish_time for s in self.steps_array) - self.arr_time
-			stats.total_finished_tasks += 1
-			return True
+	
 		
 	'''	
 	def sort_steps_ordering(self):

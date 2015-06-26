@@ -17,7 +17,7 @@ def parse_skills_workers(skills_string):
 	return k
 
 				
-
+'''
 def init_workers_from_file(filename, workers_array):
 	data = np.genfromtxt(filename, delimiter=', ', \
 	dtype=[('id','i8'),('skills','S5000'), ('avail_time','i8')])
@@ -42,7 +42,7 @@ def init_workers_from_file(filename, workers_array):
 	del workers_array[:]
 	for worker in workers_dict.values():
 		workers_array.extend([worker])
-		
+'''		
 	
 	
 def init_steps_from_file(filename, tasks_array):
@@ -50,7 +50,7 @@ def init_steps_from_file(filename, tasks_array):
 	Initializing tasks dictionary that will hold all the tasks objects. 
 	These objects can be accessible by task_id.
 	'''
-	#if os.path.getsize(filename) > 0:
+	
 	data = np.genfromtxt(filename, delimiter=', ', \
 	dtype=[('id','i8'), ('arr_time','f8'), ('task_id','i8'),\
 	 ('skills','S5000'), ('task_prio','i8'), ('order','i8')])
@@ -87,7 +87,6 @@ def init_workers_from_db(filename, workers_array):
 	dtype=[('id','i8'),('skills','S5000'), ('avail_time_start','i8'), \
 	('avail_time_end','i8'), ('timezone','i8')])
 		
-	#notice, we assume that a worker always has the same set of skills
 	for i in range(0,len(data)):
 		new_worker = Worker(data[i]['id'],\
 		parse_skills_workers(data[i]['skills']),\
@@ -97,7 +96,6 @@ def init_workers_from_db(filename, workers_array):
 		
 		workers_array.extend([new_worker])
 				
-		#stats.total_available_work_time += data[i]['avail_time']
 		
 
 def load_steps_duration(filename):
@@ -186,14 +184,7 @@ def load_samasource_data(tasks_array, f):
 			s.isLocked = False
 				
 		tasks_array[-1].add_step(s) #add step to the last task in the tasks_array
-		#if(data['task_id'] == '524326f52d7bef2278005263' and s.order == 1):
-		#	print "******inserting step of task 524326f52d7bef2278005263, step order: "+str(s.order)
-		#	sys.exit()
 		
-		#if s.task_id == '524326fc2d7bef2278006801':
-		#	print 'task id: '+str(s.task_id)+' ordinal: '+str(s.order)+' entering the system at time: '+str(stats.cur_time)
-
-		#stats.data_files_rows_read += 1
 		last_pos = f.tell()
 	
 		
