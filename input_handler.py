@@ -8,6 +8,8 @@ import os
 import time
 import sys
 import params
+import globals
+import random
 
 
 def parse_skills_workers(skills_string):
@@ -111,19 +113,19 @@ def load_steps_duration(filename):
 def get_gen(line):
     yield line
             		
-def load_samasource_data(tasks_array, f):
+def load_samasource_data(tasks_array):
 
 	if	stats.last_loaded_step_time > stats.cur_time:
 		return
 	
 	
 	task_prio = 1
-	last_pos = f.tell()
+	last_pos = globals.sama_tasks_file.tell()
 	
 	while 1:
-		line = f.readline()
+		line = globals.sama_tasks_file.readline()
 		if (stats.total_steps_entered_system - stats.fully_scheduled_steps) > params.buf:
-			f.seek(last_pos)
+			globals.sama_tasks_file.seek(last_pos)
 			return	
 			
 		
@@ -148,7 +150,7 @@ def load_samasource_data(tasks_array, f):
 					
 		if(arr_time > stats.cur_time):
 			stats.last_loaded_step_time = arr_time
-			f.seek(last_pos)
+			globals.sama_tasks_file.seek(last_pos)
 			return
 			
 		
@@ -172,7 +174,6 @@ def load_samasource_data(tasks_array, f):
 				if turnaround_time < (params.max_task_turnaround_days * 24 * 3600):
 					stats.samasource_tasks_entered += 1
 					stats.samasource_tasks_total_tunaround += turnaround_time
-					#print '****** '+str(data['task_id'])+'   '+str(stats.samasource_tasks_entered)
 			
 			
 		s = Step(data['step_id'], \
@@ -185,6 +186,46 @@ def load_samasource_data(tasks_array, f):
 				
 		tasks_array[-1].add_step(s) #add step to the last task in the tasks_array
 		
-		last_pos = f.tell()
+		last_pos = globals.sama_tasks_file.tell()
 	
+
+
+def load_steps_db_to_memory(steps_db_filename):
+	globals.steps_db = np.genfromtxt(steps_db_filename, delimiter=', ', \
+	dtype=[('id','i8'), ('skills','S5000'), ('order','i8')])
+	
+
+def generate_and_load_steps_from_db(tasks_array):
+
+	prev_time = stats.cur_time - params.time_step 
+	new_tasks_per_time_step = (params.num_of_new_tasks_per_hour * params.time_step) / 3600 
+	num_of_tasks = np.random.poisson(new_tasks_per_time_step)
+
+	for i in range(0, num_of_tasks):
 		
+		task_id = stats.total_tasks_generated
+		stats.total_tasks_generated += 1
+		
+		task_prio = random.randint(1, params.max_prio)
+		
+		new_task = Task(task_id, task_prio)
+		
+		steps_in_task = random.randint(1,params.max_ordinal)
+		for j in range(0,steps_in_task):
+			
+			step_index = random.sample(np.where(globals.steps_db['order'] == j+1)[0], 1)
+			arr_time = round(prev_time + random.random() * params.arr_time_avg_gap, 1)
+			prev_time = arr_time
+			s = Step(globals.steps_db['id'][step_index][0], arr_time, task_id, \
+			utils.parse_skills_steps(globals.steps_db['skills'][step_index][0]), task_prio, globals.steps_db['order'][step_index][0])
+			if j == 0:
+				order_of_first = s.order
+			if 	s.order == order_of_first:
+				s.isLocked = False
+			
+			new_task.add_step(s)
+			
+		tasks_array.extend([new_task])
+		#utils.print_all_tasks([new_task])
+	
+			

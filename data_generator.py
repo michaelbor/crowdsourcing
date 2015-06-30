@@ -9,9 +9,9 @@ import utils
 
 
 
-def generate_steps_db():
+def generate_steps_db(filename):
 
-	thefile = open('steps_db.txt', 'w')	
+	thefile = open(filename, 'w')	
 	thefile.write("#id, skills, ordinal\n")
 	
 	for i in range(0, params.num_of_steps_in_db):
@@ -33,9 +33,9 @@ def generate_steps_db():
 	thefile.close()
 		
 
-def generate_workers_db():
+def generate_workers_db(filename):
 
-	thefile = open('workers_db.txt', 'w')
+	thefile = open(filename, 'w')
 	thefile.write("#id, skills, avail_time_start, avail_time_end, timezone\n")
 	
 	
@@ -156,50 +156,11 @@ def random_steps():
 	
 '''	
 
-def load_steps_db_to_memory(steps_db_filename):
-	data = np.genfromtxt(steps_db_filename, delimiter=', ', \
-	dtype=[('id','i8'), ('skills','S5000'), ('order','i8')])
-	
-	return data
 
-
-def generate_and_load_steps_from_db(steps_db, tasks_array):
-
-	prev_time = stats.cur_time - params.time_step 
-	new_tasks_per_time_step = (params.num_of_new_tasks_per_hour * params.time_step) / 3600 
-	num_of_tasks = np.random.poisson(new_tasks_per_time_step)
-
-	for i in range(0, num_of_tasks):
-		
-		task_id = stats.total_tasks_generated
-		stats.total_tasks_generated += 1
-		
-		task_prio = random.randint(1, params.max_prio)
-		
-		new_task = Task(task_id, task_prio)
-		
-		steps_in_task = random.randint(1,params.max_ordinal)
-		for j in range(0,steps_in_task):
-			
-			step_index = random.sample(np.where(steps_db['order'] == j+1)[0], 1)
-			arr_time = round(prev_time + random.random() * params.arr_time_avg_gap, 1)
-			prev_time = arr_time
-			s = Step(steps_db['id'][step_index][0], arr_time, task_id, \
-			utils.parse_skills_steps(steps_db['skills'][step_index][0]), task_prio, steps_db['order'][step_index][0])
-			if j == 0:
-				order_of_first = s.order
-			if 	s.order == order_of_first:
-				s.isLocked = False
-			
-			new_task.add_step(s)
-			
-		tasks_array.extend([new_task])
-		#utils.print_all_tasks([new_task])
-	
 
 
 	
-	
+'''	
 def random_steps_from_db(steps_db_filename):
 	
 	prev_time = stats.cur_time - params.time_step 
@@ -246,7 +207,7 @@ def random_steps_from_db(steps_db_filename):
 			thefile.write("%s\n" % line[i+1])
 			
 	thefile.close()
-	
+'''	
 
 
 '''
@@ -276,6 +237,7 @@ def random_workers():
 	thefile.close()
 '''	
 
+'''
 def random_workers_from_db(workers_db_filename):
 		
 	data = np.genfromtxt(workers_db_filename, delimiter=', ', \
@@ -294,6 +256,6 @@ def random_workers_from_db(workers_db_filename):
 		str(data['skills'][5]) + ", " + str(data['avail_time'][5]) + "\n")
 	
 	thefile.close()
-	
+'''	
 	
 	

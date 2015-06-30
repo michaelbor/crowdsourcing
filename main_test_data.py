@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from __future__ import division
 import numpy as np
 import algorithm_greedy as algo
@@ -8,9 +10,8 @@ import stats
 import params
 from time import time
 import sys
-import os.path
 from optparse import OptionParser
-
+import globals
 
 
 parser = OptionParser()
@@ -35,103 +36,101 @@ parser.add_option("--buf", dest="buf",type="int", default = 200000,
 parser.add_option("--time_step", dest="time_step",type="int", default = 600,
                   help="Time step - time between consequitive schedulings", metavar="TIME_STEP")                  
 
+parser.add_option("--gen_workers", dest="new_workers_filename", default = "",
+                  help="If this option is used, the program will generate new workers file. No simulation will bee performed.", metavar="new_workers_filename")                  
+
+parser.add_option("--gen_steps", dest="new_steps_filename", default = "",
+                  help="If this option is used, the program will generate new steps file. No simulation will bee performed.", metavar="new_steps_filename")                  
+
+parser.add_option("--sim_mode", dest="simulation_mode", default = "sama",
+                  help="Simulation mode: sama - for simulation with samasource data, custom - for simulation with syntethic data.", metavar="sama/custom")                  
+
+parser.add_option("--max_days", dest="max_days", type="int", default = 3650,
+                  help="Maximum number of days to simulate. ", metavar="sama/custom")                  
+
+parser.add_option("--stats_file", dest="stats_filename", default = "",
+                  help="If this option is used, the program will generate new steps file. No simulation will bee performed.", metavar="new_steps_filename")                  
+
 
 (options, args) = parser.parse_args()
 
 params.num_of_new_tasks_per_hour = options.num_of_new_tasks_per_hour
-params.algo_type = options.algo_type
 params.buf = options.buf
 params.time_step = options.time_step
 
-
-#gen.generate_workers_db()
-#gen.generate_steps_db()
+max_iters = int(np.ceil(options.max_days * 24 * 3600 / options.time_step))
 
 
+if options.new_workers_filename != "":
+	gen.generate_workers_db(options.new_workers_filename)
+	print 'new workers file is generated: '+options.new_workers_filename
+	sys.exit()
 
-algorithm = {\
+if options.new_steps_filename != "":
+	gen.generate_steps_db(options.new_steps_filename)
+	print 'new steps file is generated: '+options.new_steps_filename
+	sys.exit()
+
+
+algorithms = {\
 1:algo.allocate_jobs1, \
 2:algo.allocate_jobs_skills_no_split, \
 3:algo.allocate_jobs_steps_no_split}
 
+load_data_functions = {\
+"sama":input.load_samasource_data, \
+"custom":input.generate_and_load_steps_from_db}
+
+scheduling_algo_func = algorithms[options.algo_type]
+load_steps_func = load_data_functions[options.simulation_mode]
 
 workers_array = []
 tasks_array = []
 
+
+if options.simulation_mode == "sama":
+	input.load_steps_duration(options.avg_steps_duration_file)
+	globals.sama_tasks_file = open(options.tasks_input_file, 'r')
+	globals.sama_tasks_file.readline() #skip the header line of the file
+	if options.stats_filename == "":
+		options.stats_filename = "y_stats_sama.txt"
+else:
+	input.load_steps_db_to_memory(options.tasks_input_file)
+	if options.stats_filename == "":
+		options.stats_filename = "y_stats_custom.txt"
+
+
 input.init_workers_from_db(options.workers_file, workers_array)
 
 
-
 stats.cur_time = params.time_step
-
-
-input.load_steps_duration(options.avg_steps_duration_file)
-
-f = open(options.tasks_input_file, 'r')
-f.readline() #skip the header line of the file
-
-#input.load_samasource_data(tasks_array, f)
-
-
 stats.t_start = time() #measuring running time of the simulation
 
 
-for stats.iter in range(0, params.max_num_of_iterations):
+for stats.iter in range(0, max_iters):
 			
 	if stats.iter % 100 == 0:
-		print '*** starting iteration '+str(stats.iter+1)+',  time: '+str(stats.cur_time)+\
-		'. [full sched: '+str(stats.fully_scheduled_steps)+\
-		', comp: '+str(stats.completed_steps)+\
-		', total: '+str(stats.total_steps_entered_system)+']'
 		utils.print_statistics()			
-		
-	#if utils.get_num_of_days_passed() > 500:# or (stats.total_backlog / (stats.iter+1)) > 500:
-	#	break
 		
 	if stats.steps_file_ended == 1 and not tasks_array:
 		break
 		
-	input.load_samasource_data(tasks_array, f)
+	load_steps_func(tasks_array)
 	ready_workers = [x for x in workers_array if x.is_ready() == True]
-	algorithm[params.algo_type](tasks_array, ready_workers)
+	scheduling_algo_func(tasks_array, ready_workers)
 	tasks_array = [x for x in tasks_array if not x.is_completed()]
 	stats.total_backlog += (stats.total_steps_entered_system - stats.fully_scheduled_steps)
 	stats.cur_time += params.time_step
 
 stats.t_end = time()
 
-f.close
+if options.simulation_mode == "sama":
+	globals.sama_tasks_file.close()
 
 print '=== final statistics ==='
-print '*** finished iteration '+str(stats.iter+1)+',  time: '+str(stats.cur_time)+\
-		'. [full sched: '+str(stats.fully_scheduled_steps)+\
-		', comp: '+str(stats.completed_steps)+\
-		', total: '+str(stats.total_steps_entered_system)+']'
 utils.print_statistics()
 
-
-if os.path.isfile('y_res.txt') == False:
-	thefile = open('y_res.txt', 'a')
-	thefile.write("#algo,load(tasks/h),tasks_file,TAT,num_of_tasks,S_TAT,S_num_of_tasks,S_max_days,backlog_avg,utilization,days_passed,runtime,time_step,buf\n")
-else:
-	thefile = open('y_res.txt', 'a')
+utils.write_stats_to_file(options)
 
 
-thefile.write("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n" % (\
-params.algo_type,\
-params.num_of_new_tasks_per_hour,\
-options.tasks_input_file,\
-round(stats.total_tasks_turnaround_time/stats.total_finished_tasks,2),\
-stats.total_finished_tasks,\
-round(stats.samasource_tasks_total_tunaround/stats.samasource_tasks_entered,2),\
-stats.samasource_tasks_entered,\
-params.max_task_turnaround_days,\
-round(stats.total_backlog / stats.iter,2),\
-round(stats.new_total_work_time/(stats.total_available_work_time_per_day*(utils.get_num_of_days_passed()))/3600,5)*100,\
-round(utils.get_num_of_days_passed(),2),\
-round(time()-stats.t_start,3),\
-params.time_step,\
-params.buf))
-
-thefile.close()
 

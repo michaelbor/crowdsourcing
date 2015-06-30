@@ -3,6 +3,7 @@ import stats
 import params
 from time import time
 import sys
+import os.path
 
 
 def parse_skills_steps(skills_string):
@@ -122,7 +123,12 @@ def get_num_of_days_passed():
 	
 	
 def print_statistics():
-	print '--------- statistics -----------------------------'
+	print '--------- statistics ----------------------------------------'
+	print 'iteration '+str(stats.iter+1)+',  time: '+str(stats.cur_time)+\
+		'. [full sched: '+str(stats.fully_scheduled_steps)+\
+		', comp: '+str(stats.completed_steps)+\
+		', total: '+str(stats.total_steps_entered_system)+']'
+	
 	if stats.completed_steps > 0 and stats.new_total_work_time > 0 and stats.fully_scheduled_steps > 0:
 		print 'avg backlogged steps: '+str(round(stats.total_backlog / stats.iter,2))
 	
@@ -144,7 +150,7 @@ def print_statistics():
 		str(round(stats.new_total_work_time/get_num_of_days_passed()))
 	
 	print 'running time: '+str(round(time()-stats.t_start,3))+' sec'
-	print '--------------------------------------------------\n'	
+	print '-------------------------------------------------------------\n'	
 
 	
 def get_local_time_in_hours(timezone):
@@ -161,5 +167,55 @@ def prepare_submission_at(str_from_file):
 	return ret
 			
 
+def write_stats_to_file(opt):
+
+	print 'saving statistics to file: '+opt.stats_filename
+	if opt.simulation_mode == "sama":
+		if os.path.isfile(opt.stats_filename) == False:
+			thefile = open(opt.stats_filename, 'a')
+			thefile.write("#algo,tasks_file,workers_file,TAT,num_of_tasks,S_TAT,S_num_of_tasks,S_max_days,backlog_avg,utilization,days_passed,runtime,time_step,buf\n")
+		else:
+			thefile = open(opt.stats_filename, 'a')
+
+
+		thefile.write("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n" % (\
+		opt.algo_type,\
+		opt.tasks_input_file,\
+		opt.workers_file,\
+		round(stats.total_tasks_turnaround_time/stats.total_finished_tasks,2),\
+		stats.total_finished_tasks,\
+		round(stats.samasource_tasks_total_tunaround/stats.samasource_tasks_entered,2),\
+		stats.samasource_tasks_entered,\
+		params.max_task_turnaround_days,\
+		round(stats.total_backlog / stats.iter,2),\
+		round(stats.new_total_work_time/(stats.total_available_work_time_per_day*(get_num_of_days_passed()))/3600,5)*100,\
+		round(get_num_of_days_passed(),2),\
+		round(time()-stats.t_start,3),\
+		params.time_step,\
+		params.buf))
+
+		thefile.close()
+	else:
+		if os.path.isfile(opt.stats_filename) == False:
+			thefile = open(opt.stats_filename, 'a')
+			thefile.write("#algo,load(tasks/h),tasks_file,workers_file,TAT,num_of_tasks,backlog_avg,utilization,days_passed,runtime,time_step\n")
+		else:
+			thefile = open(opt.stats_filename, 'a')
+
+
+		thefile.write("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n" % (\
+		opt.algo_type,\
+		params.num_of_new_tasks_per_hour,\
+		opt.tasks_input_file,\
+		opt.workers_file,\
+		round(stats.total_tasks_turnaround_time/stats.total_finished_tasks,2),\
+		stats.total_finished_tasks,\
+		round(stats.total_backlog / stats.iter,2),\
+		round(stats.new_total_work_time/(stats.total_available_work_time_per_day*(get_num_of_days_passed()))/3600,5)*100,\
+		round(get_num_of_days_passed(),2),\
+		round(time()-stats.t_start,3),\
+		params.time_step))
+
+		thefile.close()
 
 	
