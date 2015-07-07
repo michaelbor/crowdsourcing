@@ -1,4 +1,5 @@
 import stats
+import params
 
 class Task:
 	""" Class that represents any task """
