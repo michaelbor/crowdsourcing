@@ -132,14 +132,16 @@ def load_samasource_data(tasks_array):
 		if line == '':
 			stats.steps_file_ended = 1
 			return
+		
+		
+		dtype_list = [('step_id','i8'),('task_id','S50'), ('created_at','S50'),\
+		('ordinal','i8'),('duration_gold','f8'),('duration','f8'),\
+		('last_submission_at','S50'),('answered_at','S50'),('project_id','i8')]
 			
-		if(len(line.split("|")) != 8):
+		if(len(line.split("|")) != len(dtype_list)):
 			continue
 							
-		data = np.genfromtxt(get_gen(line), delimiter='|', autostrip = True,\
-		dtype=[('step_id','i8'),('task_id','S50'), ('created_at','S50'),\
-		('ordinal','i8'),('duration_gold','f8'),('duration','f8'),\
-		('last_submission_at','S50'),('answered_at','S50'),('project_id','i8')])
+		data = np.genfromtxt(get_gen(line), delimiter='|', autostrip = True, dtype = dtype_list)
 			
 		
 		if stats.total_steps_entered_system == 0:
