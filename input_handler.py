@@ -87,7 +87,7 @@ def init_steps_from_file(filename, tasks_array):
 def init_workers_from_db(filename, workers_array):
 	data = np.genfromtxt(filename, delimiter=', ', \
 	dtype=[('id','i8'),('skills','S5000'), ('avail_time_start','i8'), \
-	('avail_time_end','i8'), ('timezone','i8')])
+	('avail_time_end','i8'), ('timezone','f8')])
 		
 	for i in range(0,len(data)):
 		new_worker = Worker(data[i]['id'],\
@@ -139,7 +139,7 @@ def load_samasource_data(tasks_array):
 		data = np.genfromtxt(get_gen(line), delimiter='|', autostrip = True,\
 		dtype=[('step_id','i8'),('task_id','S50'), ('created_at','S50'),\
 		('ordinal','i8'),('duration_gold','f8'),('duration','f8'),\
-		('last_submission_at','S50'),('answered_at','S50')])
+		('last_submission_at','S50'),('answered_at','S50'),('project_id','i8')])
 			
 		
 		if stats.total_steps_entered_system == 0:
@@ -155,7 +155,7 @@ def load_samasource_data(tasks_array):
 			
 		
 		if len(tasks_array) == 0 or tasks_array[-1].id != data['task_id']:
-			new_task = Task(data['task_id'], task_prio)
+			new_task = Task(data['task_id'], task_prio, data['project_id'])
 			tasks_array.extend([new_task])
 			last_submission_string = utils.prepare_submission_at(str(data['last_submission_at']))
 			
@@ -174,6 +174,10 @@ def load_samasource_data(tasks_array):
 				if turnaround_time < (params.max_task_turnaround_days * 24 * 3600):
 					stats.samasource_tasks_entered += 1
 					stats.samasource_tasks_total_tunaround += turnaround_time
+					
+					if data['project_id'] in params.real_time_projects:
+						stats.samasource_tasks_entered_realtime += 1
+						stats.samasource_tasks_total_tunaround_realtime += turnaround_time
 			
 			
 		s = Step(data['step_id'], \

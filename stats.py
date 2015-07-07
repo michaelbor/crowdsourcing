@@ -21,6 +21,11 @@ total_tasks_turnaround_time = 0
 samasource_tasks_entered = 0
 samasource_tasks_total_tunaround = 0
 
+total_finished_tasks_realtime = 0
+total_tasks_turnaround_time_realtime = 0
+samasource_tasks_entered_realtime = 0
+samasource_tasks_total_tunaround_realtime = 0
+
 new_total_work_time = 0
 total_backlog = 0
 iter = 0

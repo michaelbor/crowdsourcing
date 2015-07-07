@@ -136,10 +136,20 @@ def print_statistics():
 		print 'avg task turnaround time: ' + \
 	 	str(round(stats.total_tasks_turnaround_time/stats.total_finished_tasks,2))+' sec   completed tasks: '+str(stats.total_finished_tasks)
 	
+	if stats.total_finished_tasks_realtime > 0 and stats.total_tasks_turnaround_time_realtime > 0:
+		print 'avg task turnaround time (real time projects): ' + \
+	 	str(round(stats.total_tasks_turnaround_time_realtime/stats.total_finished_tasks_realtime,2))+' sec   completed tasks: '+str(stats.total_finished_tasks_realtime)
+	
 	if stats.samasource_tasks_entered > 0 and stats.samasource_tasks_total_tunaround > 0:
 		print 'avg SAMASOURCE task turnaround time: ' + \
 	 	str(round(stats.samasource_tasks_total_tunaround/stats.samasource_tasks_entered,2))+\
 	 	' sec   evaluated tasks: '+str(stats.samasource_tasks_entered)+\
+	 	' with at most '+str(params.max_task_turnaround_days)+' days'
+	 	
+	if stats.samasource_tasks_entered_realtime > 0 and stats.samasource_tasks_total_tunaround_realtime > 0:
+		print 'avg SAMASOURCE task turnaround time (real time projects): ' + \
+	 	str(round(stats.samasource_tasks_total_tunaround_realtime/stats.samasource_tasks_entered_realtime,2))+\
+	 	' sec   evaluated tasks: '+str(stats.samasource_tasks_entered_realtime)+\
 	 	' with at most '+str(params.max_task_turnaround_days)+' days'
 	
 	if stats.total_available_work_time_per_day > 0:

@@ -3,9 +3,10 @@ import stats
 class Task:
 	""" Class that represents any task """
 
-	def __init__(self, id, task_prio):
+	def __init__(self, id, task_prio, project_id=0):
 
 		self.id = id
+		self.project_id = project_id
 		self.task_prio = task_prio
 		self.arr_time = 0
 		self.steps_array = []
@@ -38,6 +39,9 @@ class Task:
 		else:
 			stats.total_tasks_turnaround_time += max(s.finish_time for s in self.steps_array) - self.arr_time
 			stats.total_finished_tasks += 1
+			if self.project_id in params.real_time_projects:
+				stats.total_tasks_turnaround_time_realtime += max(s.finish_time for s in self.steps_array) - self.arr_time
+				stats.total_finished_tasks_realtime += 1
 			return True
 			
 	

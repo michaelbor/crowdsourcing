@@ -16,3 +16,4 @@ max_ordinal = 3
 num_of_new_tasks_per_hour = 100
 max_task_turnaround_days = 365
 buf = 200000
+real_time_projects = [381, 229, 10, 3]
