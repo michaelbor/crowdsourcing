@@ -183,12 +183,12 @@ def write_stats_to_file(opt):
 	if opt.simulation_mode == "sama":
 		if os.path.isfile(opt.stats_filename) == False:
 			thefile = open(opt.stats_filename, 'a')
-			thefile.write("#algo,tasks_file,workers_file,TAT,num_of_tasks,S_TAT,S_num_of_tasks,S_max_days,backlog_avg,utilization,days_passed,runtime,time_step,buf\n")
+			thefile.write("#algo,tasks_file,workers_file,TAT,#tasks,S_TAT,$S_tasks,TAT_RT,#tasks_RT, S_TAT_RT,#S_TAT_RT,S_max_days,bcklog_avg,util,#days,runtime,time_step,buf\n")
 		else:
 			thefile = open(opt.stats_filename, 'a')
 
 
-		thefile.write("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n" % (\
+		thefile.write("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n" % (\
 		opt.algo_type,\
 		opt.tasks_input_file,\
 		opt.workers_file,\
@@ -196,6 +196,10 @@ def write_stats_to_file(opt):
 		stats.total_finished_tasks,\
 		round(stats.samasource_tasks_total_tunaround/stats.samasource_tasks_entered,2),\
 		stats.samasource_tasks_entered,\
+		round(stats.total_tasks_turnaround_time_realtime/stats.total_finished_tasks_realtime,2),\
+		stats.total_finished_tasks_realtime,\
+		round(stats.samasource_tasks_total_tunaround_realtime/stats.samasource_tasks_entered_realtime,2),\
+		stats.samasource_tasks_entered_realtime,\
 		params.max_task_turnaround_days,\
 		round(stats.total_backlog / stats.iter,2),\
 		round(stats.new_total_work_time/(stats.total_available_work_time_per_day*(get_num_of_days_passed()))/3600,5)*100,\
