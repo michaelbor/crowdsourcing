@@ -119,15 +119,11 @@ def load_samasource_data(tasks_array):
 		return
 	
 	
-	task_prio = 1
+	task_prio = 0
 	last_pos = globals.sama_tasks_file.tell()
 	
 	while 1:
-		line = globals.sama_tasks_file.readline()
-		if (stats.total_steps_entered_system - stats.fully_scheduled_steps) > params.buf:
-			globals.sama_tasks_file.seek(last_pos)
-			return	
-			
+		line = globals.sama_tasks_file.readline()	
 		
 		if line == '':
 			stats.steps_file_ended = 1
@@ -142,7 +138,11 @@ def load_samasource_data(tasks_array):
 			continue
 							
 		data = np.genfromtxt(get_gen(line), delimiter='|', autostrip = True, dtype = dtype_list)
-			
+		
+		if (stats.total_steps_entered_system - stats.fully_scheduled_steps) > params.buf and\
+		tasks_array[-1].id != data['task_id']:
+			globals.sama_tasks_file.seek(last_pos)
+			return	
 		
 		if stats.total_steps_entered_system == 0:
 			stats.first_step_time = time.mktime(time.strptime(str(data['created_at']), '%Y-%m-%d %H:%M:%S'))
@@ -157,6 +157,8 @@ def load_samasource_data(tasks_array):
 			
 		
 		if len(tasks_array) == 0 or tasks_array[-1].id != data['task_id']:
+			if data['project_id'] in params.real_time_projects:
+				task_prio = 1
 			new_task = Task(data['task_id'], task_prio, data['project_id'])
 			tasks_array.extend([new_task])
 			last_submission_string = utils.prepare_submission_at(str(data['last_submission_at']))
@@ -194,6 +196,7 @@ def load_samasource_data(tasks_array):
 		
 		last_pos = globals.sama_tasks_file.tell()
 	
+		utils.sort_tasks_two_priorities(tasks_array)
 
 
 def load_steps_db_to_memory(steps_db_filename):

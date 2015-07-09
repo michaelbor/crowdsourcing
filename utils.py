@@ -232,4 +232,53 @@ def write_stats_to_file(opt):
 
 		thefile.close()
 
+
+def sort_tasks_two_priorities(tasks_array):
+
+	p1 = 0
+	p2 = 0
+	l = len(tasks_array)
+	first_zero_encountered = False
+	for p1 in range(0,l):
+		
+		if tasks_array[p1].task_prio == 0:
+			if first_zero_encountered == False:
+				first_zero_encountered = True
+				p2 = p1
+		else:
+			if first_zero_encountered:
+				tmp = tasks_array[p1]
+				tasks_array[p1] = tasks_array[p2]
+				tasks_array[p2] = tmp
+				p2 += 1
+			
+			
+def sort_tasks_two_priorities1(tasks_array):
+	
+	p1 = 0
+	p2 = 0
+	l = len(tasks_array)
+	first_zero_encountered = False
+	for p1 in range(0,l):
+		
+		if tasks_array[p1] == 0:
+			if first_zero_encountered == False:
+				first_zero_encountered = True
+				p2 = p1
+		else:
+			if first_zero_encountered:
+				tmp = tasks_array[p1]
+				tasks_array[p1] = tasks_array[p2]
+				tasks_array[p2] = tmp
+				p2 += 1
+			
+			
+		
+		
+		
+		
+		
+		
+		
+		
 	

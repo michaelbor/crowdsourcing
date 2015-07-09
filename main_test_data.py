@@ -107,6 +107,12 @@ stats.cur_time = params.time_step
 stats.t_start = time() #measuring running time of the simulation
 
 
+#k=[229,0,77,0,1,0,2,3,0,0,4,0,0,0,0,0,5,6,0,7,8,0,9,0,0,4,0]
+#print k
+#utils.sort_tasks_two_priorities1(k)
+#print k
+#sys.exit()
+
 for stats.iter in range(0, max_iters):
 			
 	if stats.iter % 100 == 0:
