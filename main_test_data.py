@@ -73,7 +73,8 @@ if options.new_steps_filename != "":
 
 
 algorithms = {\
-1:algo.allocate_jobs1, \
+#1:algo.allocate_jobs1, \
+1:algo.allocate_jobs_prio, \
 2:algo.allocate_jobs_skills_no_split, \
 3:algo.allocate_jobs_steps_no_split}
 
@@ -123,7 +124,8 @@ for stats.iter in range(0, max_iters):
 		
 	load_steps_func(tasks_array)
 	ready_workers = [x for x in workers_array if x.is_ready() == True]
-	scheduling_algo_func(tasks_array, ready_workers)
+	scheduling_algo_func(tasks_array, ready_workers,1)
+	scheduling_algo_func(tasks_array, ready_workers,0)
 	tasks_array = [x for x in tasks_array if not x.is_completed()]
 	stats.total_backlog += (stats.total_steps_entered_system - stats.fully_scheduled_steps)
 	stats.cur_time += params.time_step

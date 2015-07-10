@@ -24,6 +24,40 @@ def is_step_fully_scheduled(step):
 			
 	return True
 
+def allocate_jobs_prio(tasks_array, workers_array, prio):
+
+	for task in tasks_array:
+		if task.task_prio != prio:
+			continue
+		for step in task.steps_array:
+			res = utils.get_step_status(task, step)
+			if res == 1:
+				break
+			if res == 2:
+				continue			
+			for skill in step.skills:
+				required_time = skill[1]
+				temp_workers = []
+				random.shuffle(workers_array)
+				for worker in workers_array:
+					if skill[0] in worker.skills and skill[1] > 0:
+						worker.used_time = min(worker.get_avail_time_sec(), required_time)
+						required_time -= worker.used_time
+						temp_workers.extend([worker])
+			
+						if required_time == 0:	
+							update_avail_time(temp_workers)	
+							step.finish_time = max(max(w.ready_time for w in temp_workers),step.finish_time)
+							skill[1] = 0 #skill is allocated, clear its required time
+							break
+	
+			
+				if required_time > 0: 			
+					reset_used_time(temp_workers) #skill can't be allocated now.
+		
+			if is_step_fully_scheduled(step) == True:
+				step.isFullyScheduled = True
+				stats.fully_scheduled_steps += 1 
 
 
 def allocate_jobs1(tasks_array, workers_array):
