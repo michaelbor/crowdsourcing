@@ -4,7 +4,16 @@ import params
 from time import time
 import sys
 import os.path
+import globals
 
+
+def get_tat():
+	last_ans = max(globals.sama_cur_task_time, key=lambda p: p[0])[0]
+	tmp = min(globals.sama_cur_task_time, key=lambda p: p[0]-p[1])
+	first = tmp[0] - tmp[1]
+	#print globals.sama_cur_task_time
+	globals.sama_cur_task_time = []
+	return last_ans - first
 
 def parse_skills_steps(skills_string):
 	k = skills_string.translate(None,'[]')
