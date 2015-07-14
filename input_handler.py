@@ -164,7 +164,9 @@ def load_samasource_data(tasks_array):
 			return
 		
 		
-		
+		#if data['project_id'] not in params.real_time_projects:
+			#last_pos = globals.sama_tasks_file.tell()
+			#continue
 		
 		tat = -1
 		if len(tasks_array) == 0 or tasks_array[-1].id != data['task_id']:
