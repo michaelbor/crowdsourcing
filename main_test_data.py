@@ -12,6 +12,9 @@ from time import time
 import sys
 from optparse import OptionParser
 import globals
+import distr_bins
+
+globals.sama_bins = distr_bins.distr_bins(100,10000000)
 
 
 parser = OptionParser()
@@ -140,5 +143,5 @@ utils.print_statistics()
 
 utils.write_stats_to_file(options)
 
-
+globals.sama_bins.write_to_file("bins.txt")
 

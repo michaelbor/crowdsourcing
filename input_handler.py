@@ -12,6 +12,7 @@ import globals
 import random
 
 
+
 def parse_skills_workers(skills_string):
 	k = skills_string.translate(None,'[]')
 	k = k.split(',')
@@ -118,6 +119,8 @@ def load_samasource_data(tasks_array):
 	if	stats.last_loaded_step_time > stats.cur_time:
 		return
 	
+	if stats.steps_file_ended == 1:
+		return
 	
 	task_prio = 0
 	last_pos = globals.sama_tasks_file.tell()
@@ -173,21 +176,24 @@ def load_samasource_data(tasks_array):
 		
 			if globals.is_first_task == True:
 				globals.is_first_task = False
-			else:
+			else:	
 				tat = utils.get_tat()
 				if tat < (params.max_task_turnaround_days * 24 * 3600):
 					stats.samasource_tasks_entered += 1
 					stats.samasource_tasks_total_tunaround += tat
+					globals.sama_bins.insert(tat)
 					
-					if data['project_id'] in params.real_time_projects:
+					if globals.sama_cur_task_project_id in params.real_time_projects:
 						stats.samasource_tasks_entered_realtime += 1
 						stats.samasource_tasks_total_tunaround_realtime += tat
+						
 				
 
 			ans_at_str = utils.prepare_submission_at(str(data['answered_at']))
 			ans_at = time.mktime(time.strptime(ans_at_str, '%Y-%m-%d %H:%M:%S'))
 			dur = float(data['duration'])
-			globals.sama_cur_task_time.extend([[ans_at, dur]])	
+			globals.sama_cur_task_time.extend([[ans_at, dur]])
+			globals.sama_cur_task_project_id = data['project_id']
 		
 			if data['project_id'] in params.real_time_projects:
 				task_prio = 1

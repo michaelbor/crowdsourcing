@@ -11,7 +11,6 @@ def get_tat():
 	last_ans = max(globals.sama_cur_task_time, key=lambda p: p[0])[0]
 	tmp = min(globals.sama_cur_task_time, key=lambda p: p[0]-p[1])
 	first = tmp[0] - tmp[1]
-	#print globals.sama_cur_task_time
 	globals.sama_cur_task_time = []
 	return last_ans - first
 
