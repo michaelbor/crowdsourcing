@@ -14,7 +14,7 @@ from optparse import OptionParser
 import globals
 import distr_bins
 
-globals.sama_bins = distr_bins.distr_bins(100,10000000)
+globals.sama_bins = distr_bins.distr_bins(100,1000000)
 
 
 parser = OptionParser()

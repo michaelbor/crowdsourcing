@@ -4,7 +4,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 data = np.genfromtxt('bins.txt', names=['x1'])
-x_coord = range(0,10000000,10000000/100)
+x_coord = range(0,1000000,1000000/100)
 
 fig = plt.figure()
 
