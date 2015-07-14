@@ -14,8 +14,10 @@ from optparse import OptionParser
 import globals
 import distr_bins
 
-globals.sama_bins = distr_bins.distr_bins(100,1000000)
-
+globals.sama_bins = distr_bins.distr_bins(params.bins_num_of_bins,params.bins_max_val)
+globals.sama_bins_realtime = distr_bins.distr_bins(params.bins_num_of_bins,params.bins_max_val)
+globals.our_algo_bins = distr_bins.distr_bins(params.bins_num_of_bins,params.bins_max_val)
+globals.our_algo_bins_realtime = distr_bins.distr_bins(params.bins_num_of_bins,params.bins_max_val)
 
 parser = OptionParser()
 parser.add_option("--tasks_per_hour", dest="num_of_new_tasks_per_hour",type="int", default = 100,
@@ -143,5 +145,7 @@ utils.print_statistics()
 
 utils.write_stats_to_file(options)
 
-globals.sama_bins.write_to_file("bins.txt")
-
+globals.sama_bins.write_to_file("bins_sama.txt")
+globals.sama_bins_realtime.write_to_file("bins_sama_realtime.txt")
+globals.our_algo_bins.write_to_file("bins_our_algo.txt")
+globals.our_algo_bins_realtime.write_to_file("bins_our_algo_realtime.txt")

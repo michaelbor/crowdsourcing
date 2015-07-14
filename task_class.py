@@ -1,5 +1,6 @@
 import stats
 import params
+import globals 
 
 class Task:
 	""" Class that represents any task """
@@ -13,10 +14,6 @@ class Task:
 		self.steps_array = []
 		
 	
-	#def __del__(self):
-	#	stats.total_tasks_turnaround_time += max(s.finish_time for s in self.steps_array) - self.arr_time
-	#	stats.total_finished_tasks += 1
-	#	print self.id
         
 	def print_task(self):
 		return "(" + str(self.id) + "," + str(self.arr_time) + ","\
@@ -38,11 +35,14 @@ class Task:
 		if False in (s.isCompleted for s in self.steps_array):
 			return False
 		else:
-			stats.total_tasks_turnaround_time += max(s.finish_time for s in self.steps_array) - self.arr_time
+			tat = max(s.finish_time for s in self.steps_array) - self.arr_time
+			stats.total_tasks_turnaround_time += tat
 			stats.total_finished_tasks += 1
+			globals.our_algo_bins.insert(tat)
 			if self.project_id in params.real_time_projects:
-				stats.total_tasks_turnaround_time_realtime += max(s.finish_time for s in self.steps_array) - self.arr_time
+				stats.total_tasks_turnaround_time_realtime += tat
 				stats.total_finished_tasks_realtime += 1
+				globals.our_algo_bins_realtime.insert(tat)
 			return True
 			
 	

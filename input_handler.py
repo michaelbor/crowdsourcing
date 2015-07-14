@@ -167,10 +167,6 @@ def load_samasource_data(tasks_array):
 			return
 		
 		
-		#if data['project_id'] not in params.real_time_projects:
-			#last_pos = globals.sama_tasks_file.tell()
-			#continue
-		
 		tat = -1
 		if len(tasks_array) == 0 or tasks_array[-1].id != data['task_id']:
 		
@@ -186,6 +182,7 @@ def load_samasource_data(tasks_array):
 					if globals.sama_cur_task_project_id in params.real_time_projects:
 						stats.samasource_tasks_entered_realtime += 1
 						stats.samasource_tasks_total_tunaround_realtime += tat
+						globals.sama_bins_realtime.insert(tat)
 						
 				
 
@@ -201,30 +198,6 @@ def load_samasource_data(tasks_array):
 			tasks_array.extend([new_task])
 			
 			
-			'''	
-			last_submission_string = utils.prepare_submission_at(str(data['last_submission_at']))
-					
-			if str(data['last_submission_at']).strip() != '':
-				first_submission_string = utils.prepare_submission_at(str(data['answered_at']))
-				last_submission = time.mktime(time.strptime(last_submission_string, '%Y-%m-%d %H:%M:%S')) \
-					- stats.first_step_time
-					
-				first_submission = time.mktime(time.strptime(first_submission_string, '%Y-%m-%d %H:%M:%S')) \
-					- stats.first_step_time
-				
-				duration_of_first_step = float(data['duration'])
-				turnaround_time = last_submission - (first_submission - duration_of_first_step)
-			
-				if turnaround_time < (params.max_task_turnaround_days * 24 * 3600):
-					stats.samasource_tasks_entered += 1
-					stats.samasource_tasks_total_tunaround += turnaround_time
-					
-					#print [tat, turnaround_time]
-					
-					if data['project_id'] in params.real_time_projects:
-						stats.samasource_tasks_entered_realtime += 1
-						stats.samasource_tasks_total_tunaround_realtime += turnaround_time
-			'''
 		else:
 			ans_at_str = utils.prepare_submission_at(str(data['answered_at']))
 			ans_at = time.mktime(time.strptime(ans_at_str, '%Y-%m-%d %H:%M:%S'))
@@ -243,7 +216,6 @@ def load_samasource_data(tasks_array):
 		
 		last_pos = globals.sama_tasks_file.tell()
 	
-		#utils.sort_tasks_two_priorities(tasks_array)
 
 
 def load_steps_db_to_memory(steps_db_filename):
