@@ -134,10 +134,13 @@ def load_samasource_data(tasks_array):
 			if tat < (params.max_task_turnaround_days * 24 * 3600):
 				stats.samasource_tasks_entered += 1
 				stats.samasource_tasks_total_tunaround += tat
+				globals.sama_bins.insert(tat)
 				
 				if data['project_id'] in params.real_time_projects:
 					stats.samasource_tasks_entered_realtime += 1
 					stats.samasource_tasks_total_tunaround_realtime += tat
+					globals.sama_bins_realtime.insert(tat)
+					
 			return
 		
 		
