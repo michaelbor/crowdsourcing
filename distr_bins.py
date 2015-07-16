@@ -9,7 +9,7 @@ class distr_bins:
 		self.max_num = max_num
 		
 	def insert(self, val):
-		if val <= self.max_num:
+		if val <= self.max_num and val >= 0:
 			index = int(np.floor(val/self.bin_range))
 			self.bins[index] += 1
 		else:

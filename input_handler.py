@@ -136,7 +136,7 @@ def load_samasource_data(tasks_array):
 				stats.samasource_tasks_total_tunaround += tat
 				globals.sama_bins.insert(tat)
 				
-				if data['project_id'] in params.real_time_projects:
+				if globals.sama_cur_task_project_id in params.real_time_projects:
 					stats.samasource_tasks_entered_realtime += 1
 					stats.samasource_tasks_total_tunaround_realtime += tat
 					globals.sama_bins_realtime.insert(tat)
@@ -194,6 +194,7 @@ def load_samasource_data(tasks_array):
 			dur = float(data['duration'])
 			globals.sama_cur_task_time.extend([[ans_at, dur]])
 			globals.sama_cur_task_project_id = data['project_id']
+			globals.sama_cur_task_created_at = time.mktime(time.strptime(str(data['created_at']), '%Y-%m-%d %H:%M:%S'))
 		
 			if data['project_id'] in params.real_time_projects:
 				task_prio = 1
