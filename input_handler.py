@@ -131,7 +131,7 @@ def load_samasource_data(tasks_array):
 		if line == '':
 			stats.steps_file_ended = 1
 			tat = utils.get_tat()
-			if tat < (params.max_task_turnaround_days * 24 * 3600):
+			if tat < (params.max_task_turnaround_days * 24 * 3600) and tat >= 0:
 				stats.samasource_tasks_entered += 1
 				stats.samasource_tasks_total_tunaround += tat
 				globals.sama_bins.insert(tat)
@@ -177,7 +177,7 @@ def load_samasource_data(tasks_array):
 				globals.is_first_task = False
 			else:	
 				tat = utils.get_tat()
-				if tat < (params.max_task_turnaround_days * 24 * 3600):
+				if tat < (params.max_task_turnaround_days * 24 * 3600) and tat >= 0:
 					stats.samasource_tasks_entered += 1
 					stats.samasource_tasks_total_tunaround += tat
 					globals.sama_bins.insert(tat)
