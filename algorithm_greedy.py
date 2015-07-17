@@ -24,6 +24,12 @@ def is_step_fully_scheduled(step):
 			
 	return True
 
+
+def allocate_jobs_prio_wrap(tasks_array, workers_array):
+	allocate_jobs_prio(tasks_array, workers_array, 1)
+	allocate_jobs_prio(tasks_array, workers_array, 0)
+	
+
 def allocate_jobs_prio(tasks_array, workers_array, prio):
 
 	for task in tasks_array:

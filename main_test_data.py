@@ -24,7 +24,7 @@ parser.add_option("--tasks_per_hour", dest="num_of_new_tasks_per_hour",type="int
                   help="number of new tasks per hour", metavar="NUM_OF_TASKS")
                   
 parser.add_option("--algo", dest="algo_type",type="int", default = 1,
-                  help="algorithm type: 1 - split skill level\n, 2 - split on step level\n, 3 - split on task level", metavar="ALGO")
+                  help="algorithm type: 1 - split skill level\n, 2 - split on step level\n, 3 - split on task level\n, 4 - like algorithm 1 but with two priorities - first prio 1 then prio 0 is serverd", metavar="ALGO")
                   
 parser.add_option("--workers", dest="workers_file", default = "../data/workers_db.txt",
                   help="file with list of workers and their availability times", metavar="FILE")
@@ -78,8 +78,9 @@ if options.new_steps_filename != "":
 
 
 algorithms = {\
-#1:algo.allocate_jobs1, \
-1:algo.allocate_jobs_prio, \
+1:algo.allocate_jobs1, \
+4: algo.allocate_jobs_prio_wrap,\
+#1:algo.allocate_jobs_prio, \
 2:algo.allocate_jobs_skills_no_split, \
 3:algo.allocate_jobs_steps_no_split}
 
@@ -113,11 +114,6 @@ stats.cur_time = params.time_step
 stats.t_start = time() #measuring running time of the simulation
 
 
-#k=[229,0,77,0,1,0,2,3,0,0,4,0,0,0,0,0,5,6,0,7,8,0,9,0,0,4,0]
-#print k
-#utils.sort_tasks_two_priorities1(k)
-#print k
-#sys.exit()
 
 for stats.iter in range(0, max_iters):
 			
@@ -129,8 +125,9 @@ for stats.iter in range(0, max_iters):
 		
 	load_steps_func(tasks_array)
 	ready_workers = [x for x in workers_array if x.is_ready() == True]
-	scheduling_algo_func(tasks_array, ready_workers,1)
-	scheduling_algo_func(tasks_array, ready_workers,0)
+	scheduling_algo_func(tasks_array, ready_workers)
+	#scheduling_algo_func(tasks_array, ready_workers,1)
+	#scheduling_algo_func(tasks_array, ready_workers,0)
 	tasks_array = [x for x in tasks_array if not x.is_completed()]
 	stats.total_backlog += (stats.total_steps_entered_system - stats.fully_scheduled_steps)
 	stats.cur_time += params.time_step
