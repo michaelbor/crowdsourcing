@@ -20,7 +20,7 @@ class distr_bins:
 	def write_to_file(self,filename):
 		x_coord = range(0+int(self.bin_range/2), self.max_num+int(self.bin_range/2), self.max_num/len(self.bins))
 		total = [a*b for a,b in zip(x_coord, self.bins)]
-		print [len(x_coord),len(self.bins)]
+		#print [len(x_coord),len(self.bins)]
 		if sum(self.bins) > 0:
 			print filename+' average: '+str(sum(total)/sum(self.bins))+' writing distribution to file. '+str([sum(total),sum(self.bins)])
 		thefile = open(filename , 'w')
