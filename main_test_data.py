@@ -51,7 +51,7 @@ parser.add_option("--sim_mode", dest="simulation_mode", default = "sama",
                   help="Simulation mode: sama - for simulation with samasource data, custom - for simulation with syntethic data.", metavar="sama/custom")                  
 
 parser.add_option("--max_days", dest="max_days", type="int", default = 3650,
-                  help="Maximum number of days to simulate. ", metavar="sama/custom")                  
+                  help="Maximum number of days to simulate. ", metavar="#of days")                  
 
 parser.add_option("--stats_file", dest="stats_filename", default = "",
                   help="If this option is used, the program will generate new steps file. No simulation will bee performed.", metavar="new_steps_filename")                  
