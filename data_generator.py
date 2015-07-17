@@ -18,7 +18,8 @@ def generate_steps_db(filename):
 		id = i
 		ordinal = random.randint(1,params.max_ordinal)
 		num_of_skills = random.randint(1, params.max_num_of_skills_steps)
-		skills_seq = random.sample(range(1, params.max_num_of_skills_steps + 1), num_of_skills)
+		#skills_seq = random.sample(range(1, params.max_num_of_skills_steps + 1), num_of_skills)
+		skills_seq = random.sample(range(1, params.num_of_existing_skills + 1), min(num_of_skills,params.num_of_existing_skills))
 		skills = []
 		for i in skills_seq:
 			skills.extend([[i,random.randint(params.min_skill_time, params.max_skill_time)]])
