@@ -26,7 +26,6 @@ class Worker:
   	def is_ready(self):
 		t = utils.get_local_time_in_hours(self.timezone)
 		if t >= self.avail_time_start and t < self.avail_time_end:
-			#if ((t - self.avail_time_start)*3600 < params.time_step-0.00001) or t >= self.ready_time:
 			if stats.cur_time >= self.ready_time:
 				#first time in shift or inside the shift but past the ready_time
 				#in both cases we just ignore the ready_time and set it to the current t

@@ -5,6 +5,7 @@ from time import time
 import sys
 import os.path
 import globals
+import numpy as np
 
 
 def get_tat():
@@ -171,7 +172,7 @@ def print_statistics():
 		print 'days passed: '+str(round(get_num_of_days_passed(),2))
 		print 'workers utilization: ' + \
 		str(round(stats.new_total_work_time/\
-		(stats.total_available_work_time_per_day*(get_num_of_days_passed()))/3600,5)*100)+'%'
+		(stats.total_available_work_time_per_day*(np.ceil(get_num_of_days_passed())))/3600,5)*100)+'%'
 		str(round(stats.new_total_work_time/get_num_of_days_passed()))
 	
 	print 'running time: '+str(round(time()-stats.t_start,3))+' sec'
