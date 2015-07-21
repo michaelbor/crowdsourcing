@@ -44,6 +44,9 @@ parser.add_option("--time_step", dest="time_step",type="int", default = 600,
 parser.add_option("--gen_workers", dest="new_workers_filename", default = "",
                   help="If this option is used, the program will generate new workers file. No simulation will bee performed.", metavar="new_workers_filename")                  
 
+parser.add_option("--num_workers_to_gen", dest="num_of_workers_to_generate",type="int", default = 1000,
+                  help="number of workers that generator will generate", metavar="NUM_OF_WORKERS")
+    
 parser.add_option("--gen_steps", dest="new_steps_filename", default = "",
                   help="If this option is used, the program will generate new steps file. No simulation will bee performed.", metavar="new_steps_filename")                  
 
@@ -62,6 +65,8 @@ parser.add_option("--stats_file", dest="stats_filename", default = "",
 params.num_of_new_tasks_per_hour = options.num_of_new_tasks_per_hour
 params.buf = options.buf
 params.time_step = options.time_step
+
+params.num_of_workers_in_db = options.num_of_workers_to_generate
 
 max_iters = int(np.ceil(options.max_days * 24 * 3600 / options.time_step))
 
