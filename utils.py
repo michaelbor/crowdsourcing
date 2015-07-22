@@ -12,12 +12,15 @@ def get_tat():
 
 	last_ans = max(globals.sama_cur_task_time, key=lambda p: p[0])[0]
 	
+	tat = last_ans - globals.sama_cur_task_created_at
+	'''
 	if globals.sama_cur_task_project_id in params.real_time_projects:
 		tat = last_ans - globals.sama_cur_task_created_at	
 	else:
 		tmp = min(globals.sama_cur_task_time, key=lambda p: p[0]-p[1])
 		first = tmp[0] - tmp[1]
 		tat = last_ans - first
+	'''
 	
 	globals.sama_cur_task_time = []
 	return tat
