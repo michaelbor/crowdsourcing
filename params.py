@@ -23,7 +23,7 @@ bins_num_of_bins = 1000000
 #bins_max_val = 300000
 #bins_num_of_bins = 1000
 
-title_font = {'fontname':'Arial', 'size':'14', 'color':'black', 'weight':'normal',
+title_font = {'fontname':'Arial', 'size':'13', 'color':'black', 'weight':'normal',
               'verticalalignment':'bottom'} # Bottom vertical alignment for more space
 axis_font = {'fontname':'Arial', 'size':'14','weight':'bold'}
 axis_font_x = {'fontname':'Arial', 'size':'12','weight':'bold'}
