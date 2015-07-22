@@ -51,7 +51,7 @@ def generate_workers_db(filename):
 		skills_string = str(skills_seq)
 		skills_string = skills_string.translate(None,' ')
 		thefile.write(skills_string)		
-		thefile.write(", %d, %d, %f\n" % (avail_time_start, avail_time_end, time_zone))
+		thefile.write(", %d, %d, %f\n" % (avail_time_start, avail_time_end, round(time_zone,1)))
 
 	thefile.close()
 	
