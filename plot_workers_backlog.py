@@ -12,11 +12,11 @@ matplotlib.rcParams['ytick.labelsize'] = 12
 fig = plt.figure()
 plt.subplots_adjust(hspace = 0.5, wspace = 0.3)
 
-x_coord = range(400,1600,50)
+x_coord = range(400,1650,50)
 
 ax1 = fig.add_subplot(111)
 
-#plt.xlim([0,m])
+plt.xlim([350,1650])
 #plt.ylim([0.5,1.2])
 data = np.genfromtxt("workers_res1.txt", delimiter=',', usecols=(2,12), \
 dtype = [('filename','S150'),('backlog','f8')])

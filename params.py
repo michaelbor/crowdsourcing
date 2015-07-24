@@ -28,5 +28,10 @@ title_font = {'fontname':'Arial', 'size':'13', 'color':'black', 'weight':'normal
 axis_font = {'fontname':'Arial', 'size':'14','weight':'bold'}
 axis_font_x = {'fontname':'Arial', 'size':'12','weight':'bold'}
 
+algo1 = "substep_flex"
+algo2 = "step_flex"
+algo3 = "no_flex"
+algo_sama = "sama"
+
 #ticksize = 15
 

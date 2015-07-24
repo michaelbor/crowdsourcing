@@ -12,13 +12,13 @@ matplotlib.rcParams['ytick.labelsize'] = 12
 fig = plt.figure()
 plt.subplots_adjust(hspace = 0.5, wspace = 0.3)
 
-x_coord = range(10,220,10)
+x_coord = range(10,440,10)
 
 ax1 = fig.add_subplot(111)
 
-plt.xlim([0,210])
-plt.ylim([6000,14000])
-data = np.genfromtxt("res_workers_custom_algo_3.txt", delimiter=',', usecols=(1,3,4,6,7), \
+#plt.xlim([0,m])
+#plt.ylim([0.5,1.2])
+data = np.genfromtxt("res_workers_custom_algo_2.txt", delimiter=',', usecols=(1,3,4,6,7), \
 dtype = [('load','i8'),('filename','S150'),('tat','f8'),('backlog','f8'),('util','f8')])
 
 
@@ -34,7 +34,7 @@ for x in x_coord:
 	& (data['load']==x))]))
 
 
-ax1.set_title("TAT, Synthetic data, Max ordering = 3, Real timezones (-4,0,3,5), Algorithm 3",**params.title_font)    
+ax1.set_title("TAT, Synthetic data, Max ordering = 3, Real timezones (-4,0,3,5), Algorithm 2",**params.title_font)    
 ax1.set_xlabel('Tasks per hour',**params.axis_font_x)
 ax1.set_ylabel('TAT [sec]',**params.axis_font)
 #ax1.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
@@ -50,7 +50,7 @@ plt.tight_layout()
 
 
 
-plt.savefig('load_custom_tat_algo3.pdf', format='pdf')
+plt.savefig('load_custom_tat_algo2.pdf', format='pdf')
 
 plt.show()
 
