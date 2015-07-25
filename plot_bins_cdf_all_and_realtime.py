@@ -108,7 +108,7 @@ ax2.plot(x_coord1[0:lim], data_cdf, linewidth = 2, marker='D', color='green',lab
 
 
 
-ax2.legend(loc='center right')
+ax2.legend(loc='lower right')
 
 plt.tight_layout()
 

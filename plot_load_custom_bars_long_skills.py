@@ -6,6 +6,9 @@ import matplotlib
 import matplotlib.pyplot as plt
 import params
 
+matplotlib.rcParams['xtick.labelsize'] = 14
+matplotlib.rcParams['ytick.labelsize'] = 14
+
 # matplotlib.rcParams['pdf.fonttype'] = 42
 # matplotlib.rcParams['text.usetex'] = True
 matplotlib.rcParams['pdf.use14corefonts'] = True
@@ -159,12 +162,15 @@ print y_mean_700
 
 #leg = ax1.legend()
 
-ax1.legend( (rects_p[0][0], rects_p[1][0], rects_p[2][0],rects_t[0][0], rects_t[1][0], rects_t[2][0] ), ('algo 1, 1200 w','algo 2, 1200 w','algo 3, 1200 w','algo 1, 1600 w','algo 2, 1600 w','algo 3, 1600 w'),bbox_to_anchor=(0, 0.9, 1,0.1), loc='upper left',
+#ax1.legend( (rects_p[0][0], rects_p[1][0], rects_p[2][0],rects_t[0][0], rects_t[1][0], rects_t[2][0] ), ('algo 1, 1200 w','algo 2, 1200 w','algo 3, 1200 w','algo 1, 1600 w','algo 2, 1600 w','algo 3, 1600 w'),bbox_to_anchor=(0, 0.9, 1,0.1), loc='upper left',
+#           ncol=3,mode="expand",borderaxespad=0.,prop={'size': '13'})
+ax1.legend( (rects_p[0][0], rects_p[1][0], rects_p[2][0],rects_t[0][0], rects_t[1][0], rects_t[2][0] ), (params.algo1+', 500 w',params.algo2+', 500 w',params.algo3+', 500 w',params.algo1+', 700 w',params.algo2+', 700 w',params.algo3+', 700 w'),bbox_to_anchor=(0, 0.9, 1,0.1), loc='upper left',
            ncol=3,mode="expand",borderaxespad=0.,prop={'size': '13'})
 
 
 plt.tight_layout()
 plt.savefig('load_custom_bars_long_skills.pdf', format='pdf')
+#plt.savefig('tttttttttttttt.eps', format='eps', dpi=1000)
 
 plt.show()
 

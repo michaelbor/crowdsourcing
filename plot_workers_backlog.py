@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import params
 import sys
 
-matplotlib.rcParams['xtick.labelsize'] = 12
-matplotlib.rcParams['ytick.labelsize'] = 12
+matplotlib.rcParams['xtick.labelsize'] = 15
+matplotlib.rcParams['ytick.labelsize'] = 15
 
 fig = plt.figure()
 plt.subplots_adjust(hspace = 0.5, wspace = 0.3)
@@ -32,7 +32,7 @@ for x in x_coord:
 #print rt_tat_means
 
 
-ax1.set_title("Backlog, Samasource data, Real timezones (-4,0,3,5)",**params.title_font)    
+ax1.set_title("Backlog, Samasource data, "+params.algo1,**params.title_font)    
 ax1.set_xlabel('Num of workers',**params.axis_font_x)
 ax1.set_ylabel('Average backlog [number of unscheduled steps]',**params.axis_font)
 ax1.ticklabel_format(style='sci', axis='x', scilimits=(0,0))

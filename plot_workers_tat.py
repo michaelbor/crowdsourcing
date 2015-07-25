@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import params
 import sys
 
-matplotlib.rcParams['xtick.labelsize'] = 12
-matplotlib.rcParams['ytick.labelsize'] = 12
+matplotlib.rcParams['xtick.labelsize'] = 14
+matplotlib.rcParams['ytick.labelsize'] = 14
 
 fig = plt.figure()
 plt.subplots_adjust(hspace = 0.5, wspace = 0.3)
@@ -33,7 +33,7 @@ for x in x_coord:
 #print rt_tat_means
 
 
-ax1.set_title("TAT, Samasource data, Real timezones (-4,0,3,5)",**params.title_font)    
+ax1.set_title("TAT, Samasource data, "+params.algo1,**params.title_font)    
 ax1.set_xlabel('Num of workers',**params.axis_font_x)
 ax1.set_ylabel('TAT [sec]',**params.axis_font)
 ax1.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
