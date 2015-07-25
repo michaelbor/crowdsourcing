@@ -142,7 +142,7 @@ colors = ['lightcoral','wheat','lightblue']
 for i in range(len(patterns)):
 	rects_t[i] = ax1.bar(machines_t[i]+off12, y_mean_700[i], width, color=colors[i],hatch=patterns[i],linewidth=2)
 
-ax1.bar(machines_p[2]+off12-0.01, y_mean_500[i]+1, width*1.2, color='w',hatch=patterns[i],linewidth=2, edgecolor='w',bottom=700)
+ax1.bar(machines_p[2]+off12-0.1, y_mean_500[i]+1, width*1.8, color='w',hatch=patterns[i],linewidth=2, edgecolor='w',bottom=700)
 ax1.text(machines_p[2]+off12+0.1, 715, '3163', ha='center', va='bottom', fontsize=14)
 #==========================================
 

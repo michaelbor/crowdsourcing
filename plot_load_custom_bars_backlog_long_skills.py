@@ -114,7 +114,7 @@ colors = ['lightcoral','wheat','lightblue']
 for i in range(len(patterns)):
 	rects_t[i] = ax1.bar(machines_t[i]+off8, y_mean_700[i], width, color=colors[i],hatch=patterns[i],linewidth=2)
 
-ax1.bar(machines_p[2]+off8-0.01, y_mean_500[2]+1, width*1.2, color='w',hatch=patterns[i],linewidth=2, edgecolor='w',bottom=500)
+ax1.bar(machines_p[2]+off8-0.1, y_mean_500[2]+10, width*1.8, color='w',linewidth=2, edgecolor='w',bottom=500)
 ax1.text(machines_p[2]+off8+0.1, 515, '1145', ha='center', va='bottom', fontsize=14)
 
 
@@ -149,10 +149,10 @@ colors = ['lightcoral','wheat','lightblue']
 for i in range(len(patterns)):
 	rects_t[i] = ax1.bar(machines_t[i]+off12, y_mean_700[i], width, color=colors[i],hatch=patterns[i],linewidth=2)
 
-ax1.bar(machines_p[2]+off12-0.01, y_mean_500[2]+1, width*1.2, color='w',hatch=patterns[i],linewidth=2, edgecolor='w',bottom=750)
+ax1.bar(machines_p[2]+off12-0.1, y_mean_500[2]+1, width*1.8, color='w',hatch=patterns[i],linewidth=2, edgecolor='w',bottom=750)
 ax1.text(machines_p[2]+off12+0.1, 765, '6862', ha='center', va='bottom', fontsize=14)
 
-ax1.bar(machines_t[2]+off12-0.01, y_mean_700[2]+1, width*1.2, color='w',hatch=patterns[i],linewidth=2, edgecolor='w',bottom=700)
+ax1.bar(machines_t[2]+off12-0.1, y_mean_700[2]+1, width*1.8, color='w',hatch=patterns[i],linewidth=2, edgecolor='w',bottom=700)
 ax1.text(machines_t[2]+off12+0.1, 715, '2977', ha='center', va='bottom', fontsize=14)
 
 #==========================================
