@@ -19,7 +19,7 @@ ax1 = fig.add_subplot(111)
 width = 0.2
 #offset = width
 
-ax1.set_title("Backlog, Synthetic data",**params.title_font)   
+#ax1.set_title("Backlog, Synthetic data",**params.title_font)   
  
 #ax1.set_xlabel('Load [tasks/hour]')
 ax1.set_ylabel('Average backlog [number of unscheduled steps]',**params.axis_font)
@@ -70,16 +70,12 @@ y_mean_700[1] = np.mean((data2['backlog'][np.where((data2['load']==load) & \
 y_mean_700[2] = np.mean((data3['backlog'][np.where((data3['load']==load) & \
 (np.char.find(data3['filename'],'700')>-1))]))
 
+colors1 = ['lightgreen','lightblue','pink'];
+colors2 = ['green','blue','red'];
 
-patterns=[3*'//',3*'o',3*'x']
-colors = ['lightyellow','lightgreen','lavender'];
-for i in range(len(patterns)):
-	rects_p[i] = ax1.bar(machines_p[i]+off4, y_mean_500[i], width, color=colors[i],hatch=patterns[i],linewidth=2)
-
-patterns=[4*'-',3*'\\\\',3*'\\']
-colors = ['lightcoral','wheat','lightblue']
-for i in range(len(patterns)):
-	rects_t[i] = ax1.bar(machines_t[i]+off4, y_mean_700[i], width, color=colors[i],hatch=patterns[i],linewidth=2)
+for i in range(len(colors1)):
+	rects_p[i] = ax1.bar(machines_p[i]+off4, y_mean_500[i], width, color=colors1[i],linewidth=0.05)
+	rects_t[i] = ax1.bar(machines_t[i]+off4, y_mean_700[i], width, color=colors2[i],linewidth=0.05)
 
 #===================================
 
@@ -103,15 +99,10 @@ y_mean_700[2] = np.mean((data3['backlog'][np.where((data3['load']==load) & \
 #print y_mean_500
 #print y_mean_700
 
-patterns=[3*'//',3*'o',3*'x']
-colors = ['lightyellow','lightgreen','lavender'];
-for i in range(len(patterns)):
-	rects_p[i] = ax1.bar(machines_p[i]+off8, y_mean_500[i], width, color=colors[i],hatch=patterns[i],linewidth=2)
 
-patterns=[4*'-',3*'\\\\',3*'\\']
-colors = ['lightcoral','wheat','lightblue']
-for i in range(len(patterns)):
-	rects_t[i] = ax1.bar(machines_t[i]+off8, y_mean_700[i], width, color=colors[i],hatch=patterns[i],linewidth=2)
+for i in range(len(colors1)):
+	rects_p[i] = ax1.bar(machines_p[i]+off8, y_mean_500[i], width, color=colors1[i],linewidth=0.05)
+	rects_t[i] = ax1.bar(machines_t[i]+off8, y_mean_700[i], width, color=colors2[i],linewidth=0.05)
 
 #===================================
 
@@ -132,15 +123,11 @@ y_mean_700[1] = np.mean((data2['backlog'][np.where((data2['load']==load) & \
 y_mean_700[2] = np.mean((data3['backlog'][np.where((data3['load']==load) & \
 (np.char.find(data3['filename'],'700')>-1))]))
 
-patterns=[3*'//',3*'o',3*'x']
-colors = ['lightyellow','lightgreen','lavender'];
-for i in range(len(patterns)):
-	rects_p[i] = ax1.bar(machines_p[i]+off12, y_mean_500[i], width, color=colors[i],hatch=patterns[i],linewidth=2)
 
-patterns=[4*'-',3*'\\\\',3*'\\']
-colors = ['lightcoral','wheat','lightblue']
-for i in range(len(patterns)):
-	rects_t[i] = ax1.bar(machines_t[i]+off12, y_mean_700[i], width, color=colors[i],hatch=patterns[i],linewidth=2)
+for i in range(len(colors1)):
+	rects_p[i] = ax1.bar(machines_p[i]+off12, y_mean_500[i], width, color=colors1[i],linewidth=0.05)
+	rects_t[i] = ax1.bar(machines_t[i]+off12, y_mean_700[i], width, color=colors2[i],linewidth=0.05)
+
 
 ax1.bar(machines_p[2]+off12-0.1, y_mean_500[i]+1, width*1.8, color='w',linewidth=2, edgecolor='w',bottom=700)
 ax1.text(machines_p[2]+off12+0.1, 715, '3163', ha='center', va='bottom', fontsize=14)
@@ -153,11 +140,16 @@ print y_mean_500
 #ax1.legend( (rects_p[0][0], rects_p[1][0], rects_p[2][0],rects_t[0][0], rects_t[1][0], rects_t[2][0] ), ('algo 1, 500 w','algo 2, 500 w','algo 3, 500 w','algo 1, 700 w','algo 2, 700 w','algo 3, 700 w'),bbox_to_anchor=(0, 0.9, 1,0.1), loc='upper left',
 #           ncol=3,mode="expand",borderaxespad=0.,prop={'size': '13'})
 ax1.legend( (rects_p[0][0], rects_p[1][0], rects_p[2][0],rects_t[0][0], rects_t[1][0], rects_t[2][0] ), (params.algo1+', 500 w',params.algo2+', 500 w',params.algo3+', 500 w',params.algo1+', 700 w',params.algo2+', 700 w',params.algo3+', 700 w'),bbox_to_anchor=(0, 0.9, 1,0.1), loc='upper left',
-           ncol=3,mode="expand",borderaxespad=0.,prop={'size': '13'})
+           ncol=3,mode="expand",borderaxespad=0.,prop={'size': '13'}, frameon=False)
 
+
+ax1.xaxis.set_ticks_position('bottom')
+ax1.yaxis.set_ticks_position('left')
+ax1.spines['top'].set_visible(False)
+ax1.spines['right'].set_visible(False)
 
 plt.tight_layout()
-plt.savefig('load_custom_bars_backlog.pdf', format='pdf')
+plt.savefig('modern_load_custom_bars_backlog.pdf', format='pdf')
 
 plt.show()
 

@@ -28,7 +28,7 @@ data = np.genfromtxt("res_sama_625_workers_3_days_tat/bins_sama.txt", names=['x1
 total = float(sum(data['x1']))
 data1 = [sum(data['x1'][i:i + n])/total for i in range(0, len(data['x1']), n)]
 x_coord1 = range(0+int(bin_range/2)*n,params.bins_max_val+int(bin_range/2)*n,params.bins_max_val/(params.bins_num_of_bins/n))
-ax2.set_title("TAT CDF, Samsource data",**params.title_font)    
+#ax2.set_title("TAT CDF, Samsource data",**params.title_font)    
 ax2.set_xlabel('TAT [sec]',**params.axis_font_x)
 ax2.set_ylabel('Fraction of tasks',**params.axis_font)
 ax2.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
@@ -108,7 +108,13 @@ ax2.plot(x_coord1[0:lim], data_cdf, linewidth = 2, marker='D', color='green',lab
 
 
 
-ax2.legend(loc='lower right')
+ax2.legend(loc='lower right', frameon=False)
+
+
+ax2.xaxis.set_ticks_position('bottom')
+ax2.yaxis.set_ticks_position('left')
+ax2.spines['top'].set_visible(False)
+ax2.spines['right'].set_visible(False)
 
 plt.tight_layout()
 

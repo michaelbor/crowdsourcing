@@ -71,15 +71,13 @@ y_mean_700[2] = np.mean((data3['tat'][np.where((data3['load']==load) & \
 (np.char.find(data3['filename'],'700')>-1))]))
 
 
-patterns=[3*'//',3*'o',3*'x']
-colors = ['lightyellow','lightgreen','lavender'];
-for i in range(len(patterns)):
-	rects_p[i] = ax1.bar(machines_p[i]+off4, y_mean_500[i], width, color=colors[i],hatch=patterns[i],linewidth=2)
+colors1 = ['lightgreen','lightblue','pink'];
+colors2 = ['green','blue','red'];
+for i in range(len(colors1)):
+	rects_p[i] = ax1.bar(machines_p[i]+off4, y_mean_500[i], width, color=colors1[i],linewidth=0.05)
+	rects_t[i] = ax1.bar(machines_t[i]+off4, y_mean_700[i], width, color=colors2[i],linewidth=0.05)
 
-patterns=[4*'-',3*'\\\\',3*'\\']
-colors = ['lightcoral','wheat','lightblue']
-for i in range(len(patterns)):
-	rects_t[i] = ax1.bar(machines_t[i]+off4, y_mean_700[i], width, color=colors[i],hatch=patterns[i],linewidth=2)
+
 
 #===================================
 
@@ -103,15 +101,10 @@ y_mean_700[2] = np.mean((data3['tat'][np.where((data3['load']==load) & \
 #print y_mean_500
 #print y_mean_700
 
-patterns=[3*'//',3*'o',3*'x']
-colors = ['lightyellow','lightgreen','lavender'];
-for i in range(len(patterns)):
-	rects_p[i] = ax1.bar(machines_p[i]+off8, y_mean_500[i], width, color=colors[i],hatch=patterns[i],linewidth=2)
+for i in range(len(colors1)):
+	rects_p[i] = ax1.bar(machines_p[i]+off8, y_mean_500[i], width, color=colors1[i],linewidth=0.05)
+	rects_t[i] = ax1.bar(machines_t[i]+off8, y_mean_700[i], width, color=colors2[i],linewidth=0.05)
 
-patterns=[4*'-',3*'\\\\',3*'\\']
-colors = ['lightcoral','wheat','lightblue']
-for i in range(len(patterns)):
-	rects_t[i] = ax1.bar(machines_t[i]+off8, y_mean_700[i], width, color=colors[i],hatch=patterns[i],linewidth=2)
 
 #===================================
 
@@ -132,17 +125,14 @@ y_mean_700[1] = np.mean((data2['tat'][np.where((data2['load']==load) & \
 y_mean_700[2] = np.mean((data3['tat'][np.where((data3['load']==load) & \
 (np.char.find(data3['filename'],'700')>-1))]))
 
-patterns=[3*'//',3*'o',3*'x']
-colors = ['lightyellow','lightgreen','lavender'];
-for i in range(len(patterns)):
-	rects_p[i] = ax1.bar(machines_p[i]+off12, y_mean_500[i], width, color=colors[i],hatch=patterns[i],linewidth=2)
 
-patterns=[4*'-',3*'\\\\',3*'\\']
-colors = ['lightcoral','wheat','lightblue']
-for i in range(len(patterns)):
-	rects_t[i] = ax1.bar(machines_t[i]+off12, y_mean_700[i], width, color=colors[i],hatch=patterns[i],linewidth=2)
+for i in range(len(colors1)):
+	rects_p[i] = ax1.bar(machines_p[i]+off12, y_mean_500[i], width, color=colors1[i],linewidth=0.05)
+	rects_t[i] = ax1.bar(machines_t[i]+off12, y_mean_700[i], width, color=colors2[i],linewidth=0.05)
+	
+	
 
-ax1.bar(machines_p[2]+off12-0.01, y_mean_500[i]+1, width*1.2, color='w',hatch=patterns[i],linewidth=2, edgecolor='w',bottom=14000)
+ax1.bar(machines_p[2]+off12-0.01, y_mean_500[i]+1, width*1.2, color='w',linewidth=2, edgecolor='w',bottom=14000)
 ax1.text(machines_p[2]+off12+0.1, 14300, '42872', ha='center', va='bottom', fontsize=14)
 #==========================================
 
@@ -160,7 +150,7 @@ ax1.spines['top'].set_visible(False)
 ax1.spines['right'].set_visible(False)
 
 plt.tight_layout()
-plt.savefig('load_custom_bars.pdf', format='pdf')
+plt.savefig('modern_load_custom_bars.pdf', format='pdf')
 
 plt.show()
 

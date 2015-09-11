@@ -32,7 +32,7 @@ for x in x_coord:
 #print rt_tat_means
 
 
-ax1.set_title("Backlog, Samasource data, "+params.algo1,**params.title_font)    
+#ax1.set_title("Backlog, Samasource data, "+params.algo1,**params.title_font)    
 ax1.set_xlabel('Num of workers',**params.axis_font_x)
 ax1.set_ylabel('Average backlog [number of unscheduled steps]',**params.axis_font)
 ax1.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
@@ -42,6 +42,10 @@ ax1.plot(x_coord, backlog_means, linewidth = 2, marker='v', color='red',label='a
 
 #ax1.legend()
 
+ax1.xaxis.set_ticks_position('bottom')
+ax1.yaxis.set_ticks_position('left')
+ax1.spines['top'].set_visible(False)
+ax1.spines['right'].set_visible(False)
 plt.tight_layout()
 
 

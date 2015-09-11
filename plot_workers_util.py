@@ -32,7 +32,7 @@ for x in x_coord:
 #print rt_tat_means
 
 
-ax1.set_title("Utilization of workers, Samasource data, Real timezones (-4,0,3,5)",**params.title_font)    
+#ax1.set_title("Utilization of workers, Samasource data, Real timezones (-4,0,3,5)",**params.title_font)    
 ax1.set_xlabel('Num of workers',**params.axis_font_x)
 ax1.set_ylabel('Utilization [%]',**params.axis_font)
 ax1.ticklabel_format(style='sci', axis='x', scilimits=(0,0))

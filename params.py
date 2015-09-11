@@ -25,13 +25,13 @@ bins_num_of_bins = 1000000
 
 title_font = {'fontname':'Arial', 'size':'16', 'color':'black', 'weight':'normal',
               'verticalalignment':'bottom'} # Bottom vertical alignment for more space
-axis_font = {'fontname':'Arial', 'size':'15','weight':'bold'}
-axis_font_x = {'fontname':'Arial', 'size':'15','weight':'bold'}
+axis_font = {'fontname':'Arial', 'size':'15'}#,'weight':'bold'}
+axis_font_x = {'fontname':'Arial', 'size':'15'}#,'weight':'bold'}
 
 algo1 = "step_flex"
 algo2 = "step_semiflex"
 algo3 = "step_inflex"
-algo_sama = "sama"
+algo_sama = "current"
 
 #ticksize = 15
 
