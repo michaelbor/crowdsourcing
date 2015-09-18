@@ -87,7 +87,8 @@ algorithms = {\
 4: algo.allocate_jobs_prio_wrap,\
 #1:algo.allocate_jobs_prio, \
 2:algo.allocate_jobs_skills_no_split, \
-3:algo.allocate_jobs_steps_no_split}
+3:algo.allocate_jobs_steps_no_split,\
+5:algo.sama_algo_steps_no_split}
 
 load_data_functions = {\
 "sama":input.load_samasource_data, \

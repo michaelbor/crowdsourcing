@@ -150,9 +150,41 @@ def allocate_jobs_steps_no_split(tasks_array, workers_array):
 					break
 
 
-		 
+
+def sama_algo_steps_no_split(tasks_array, workers_array):
+
+	steps_ready_for_allocation = []
+	
+	for task in tasks_array:
+		for step in task.steps_array:
+			res = utils.get_step_status(task, step)
+			if res == 1:
+				break
+			if res == 2:
+				continue
+	
+			steps_ready_for_allocation.append(step)
+	
+	random.shuffle(steps_ready_for_allocation)
+	
+	for worker in workers_array:
+		for step in steps_ready_for_allocation:
+			step_skills_array = [x[0] for x in step.skills]
+			
+			if set(step_skills_array).issubset(worker.skills) is True and\
+			worker.get_avail_time_sec() >= step.total_skills_time and \
+			step.isFullyScheduled == False:
+			
+				worker.used_time = step.total_skills_time
+				update_avail_time([worker])
+				step.finish_time = max(max(w.ready_time for w in [worker]),step.finish_time)
+				for skill in step.skills:
+					skill[1] = 0
+				
+				step.isFullyScheduled = True
+				stats.fully_scheduled_steps += 1 
+				break
         
-    
 		
 		
 		
